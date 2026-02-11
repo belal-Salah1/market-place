@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Review>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
  */
-class ReviewFactory extends Factory
+class OrderItemFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,10 +19,10 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'rating' => $this->faker->numberBetween(1, 5),
-            'comment' => $this->faker->text,
+            'order_id' => Order::factory(),
             'product_id' => Product::factory(),
-            'customer_id' => User::factory(),
+            'quantity' => $this->faker->numberBetween(1, 10),
+            'price' => $this->faker->numberBetween(1, 1000),
         ];
     }
 }
