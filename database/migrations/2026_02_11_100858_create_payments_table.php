@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\PaymentMethodStatus;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +16,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount');
-            $table->string('method');
-            $table->string('');
+            $table->string('method')->default(PaymentMethodStatus::CASH->value);
+            $table->string('status')->default(PaymentStatus::PENDING->value);
             $table->timestamps();
         });
     }
