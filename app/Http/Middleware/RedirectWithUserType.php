@@ -12,8 +12,8 @@ class RedirectWithUserType
     {
         $user = Auth::user();
 
-        if (! $user) {
-            return $next($request);
+        if (! $user || ! $user->role) {
+            return \Inertia\Inertia::render('Dashboard');
         }
 
         switch ($user->role->name) {

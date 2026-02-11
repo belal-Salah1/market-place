@@ -36,10 +36,19 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $adminEmails = ['admin@gmail.com'];
+
+        $roleStatus = in_array($request->email, $adminEmails)
+            ? \App\Enums\RoleStatus::ADMIN
+            : \App\Enums\RoleStatus::CUSTOMER;
+
+        $role = \App\Models\Role::where('name', $roleStatus->value)->first();
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => $role->id,
         ]);
 
         event(new Registered($user));

@@ -23,11 +23,14 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
         ]);
 
+        $adminRole = \App\Models\Role::where('name', \App\Enums\RoleStatus::ADMIN->value)->first();
+
         User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
                 'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role_id' => $adminRole->id,
             ]
         );
     }
