@@ -5,26 +5,23 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class RedirectWithUserType
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
 
         if (! $user || ! $user->role) {
-            return \Inertia\Inertia::render('Dashboard');
+            return redirect()->route('dashboard.default');
         }
 
-        switch ($user->role->name) {
-            case 'admin':
-                return \Inertia\Inertia::render('Admin/Dashboard');
-            case 'vendor':
-                return \Inertia\Inertia::render('Vendor/Dashboard');
-            case 'customer':
-                return \Inertia\Inertia::render('Customer/Dashboard');
-            default:
-                return \Inertia\Inertia::render('Dashboard');
-        }
+        return match ($user->role->name) {
+            'admin'    => redirect()->route('admin.dashboard'),
+            'vendor'   => redirect()->route('vendor.dashboard'),
+            'customer' => redirect()->route('customer.dashboard'),
+            default    => redirect()->route('dashboard.default'),
+        };
     }
 }

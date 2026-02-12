@@ -2,6 +2,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 
+defineProps({
+    user: {
+        type: Object,
+        required: true,
+    },
+    pendingVendors: {
+        type: Array,
+        default: () => [],
+    },
+});
+
 const stats = [
     { name: 'Total Users', value: '1,234', change: '+12%', icon: 'users' },
     { name: 'Total Revenue', value: '$45,678', change: '+8.3%', icon: 'currency-dollar' },
