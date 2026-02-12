@@ -3,6 +3,11 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
+
+const logout = () => {
+    Inertia.post(route('logout'));
+};
 
 defineProps({
     user: {
@@ -91,14 +96,12 @@ defineProps({
                     </PrimaryButton>
                 </Link>
 
-                <form method="POST" :action="route('logout')" class="w-full sm:w-auto">
-                    <SecondaryButton
-                        type="submit"
-                        class="w-full"
-                    >
-                        Sign Out
-                    </SecondaryButton>
-                </form>
+                <SecondaryButton
+                    @click="logout"
+                    class="w-full sm:w-auto"
+                >
+                    Sign Out
+                </SecondaryButton>
             </div>
 
             <!-- Support Contact -->

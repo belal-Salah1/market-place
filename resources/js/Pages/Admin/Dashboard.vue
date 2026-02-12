@@ -1,8 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { onMounted , computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useDateFormat } from '../../composables/useDateFormat';
+import Modal from '@/Components/Modal.vue';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
     user: {
@@ -15,9 +17,34 @@ const props = defineProps({
     },
 });
 const format = useDateFormat();
+const isModalOpen = ref(false);
+const selectedVendor = ref(null);
 
- const isApproved = computed(() => props.pendingVendors.every(vendor => vendor.is_approved));
+const isApproved = computed(() => props.pendingVendors.every(vendor => vendor.is_approved));
 
+const openModal = (vendor) => {
+    selectedVendor.value = vendor;
+    isModalOpen.value = true;
+    console.log('Opening modal for vendor', vendor);
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+    selectedVendor.value = null;
+};
+
+const approve = (vendor) => {
+   Inertia.post(route('admin.vendors.approve', vendor.id), {}, {
+        onSuccess: () => {
+            closeModal();
+        },
+        onError: (errors) => {
+            console.error('Approval failed:', errors);
+        },
+    });
+    isModalOpen.value = false;
+    selectedVendor.value = null;
+};
 onMounted(() => {
     console.log('Pending Vendors:', props.pendingVendors);
 });
@@ -59,7 +86,7 @@ onMounted(() => {
                     </div>
                     <div class="divide-y divide-gray-50">
                         <div v-for="vendor in props.pendingVendors" :key="vendor.id" class="p-4 transition-colors hover:bg-gray-50">
-                            <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-4 cursor-pointer" @click="openModal(vendor)">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
                                     <span class="text-sm font-bold">{{ vendor.name.substring(0, 2) }}</span>
                                 </div>
@@ -67,12 +94,15 @@ onMounted(() => {
                                     <p class="text-sm font-medium text-gray-900">New vendor request: {{ vendor.name }}</p>
                                     <p class="text-xs text-gray-500">{{ format.format(vendor.updated_at, { dateStyle: 'short', timeStyle: 'short' }) }} • ID: #{{ vendor.id }}</p>
                                 </div>
-                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">{{ isApproved? 'success': 'pending' }} </span>
+                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">{{ isApproved ? 'Approved' : 'Pending' }} </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <Modal :show="isModalOpen" :vendor="selectedVendor" @close="closeModal" @approve="approve" maxWidth="lg" :closeable="true"/>
+           
+        
     </AuthenticatedLayout>
 </template>

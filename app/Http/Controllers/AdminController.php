@@ -18,4 +18,18 @@ class AdminController extends Controller
             'pendingVendors' => $pendingVendors,
         ]);
 }
+
+public function approve(Request $request , User $user){
+   $user->is_approved = true;
+//    dd($user);
+    $user->save();
+
+}
+
+// public function reject(Request $request , User $user){
+//    $user->is_approved = false;
+//     $user->save();
+// }
+
+
 }

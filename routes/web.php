@@ -32,6 +32,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin dashboard - pass pending vendors
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->middleware('role:admin')->name('admin.dashboard');
 
+    // Approve vendor (admin)
+    Route::post('/admin/vendors/{user}/approve', [AdminController::class, 'approve'])
+        ->middleware('role:admin')
+        ->name('admin.vendors.approve');
+
     // Vendor dashboard
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->middleware('role:vendor')->name('vendor.dashboard');
 
@@ -47,5 +52,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+// Route::post('/admin/vendors/{user}/reject', [AdminController::class, 'reject'])
+//     ->middleware('role:admin')
+//     ->name('admin.vendors.reject');
 
 require __DIR__.'/auth.php';
