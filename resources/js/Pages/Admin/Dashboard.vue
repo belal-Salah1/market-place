@@ -1,8 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import { onMounted , computed } from 'vue';
+import { useDateFormat } from '../../composables/useDateFormat';
 
-defineProps({
+const props = defineProps({
     user: {
         type: Object,
         required: true,
@@ -12,13 +14,14 @@ defineProps({
         default: () => [],
     },
 });
+const format = useDateFormat();
 
-const stats = [
-    { name: 'Total Users', value: '1,234', change: '+12%', icon: 'users' },
-    { name: 'Total Revenue', value: '$45,678', change: '+8.3%', icon: 'currency-dollar' },
-    { name: 'Active Vendors', value: '42', change: '+3', icon: 'storefront' },
-    { name: 'System Health', value: 'Optimal', change: '100%', icon: 'shield-check' },
-];
+ const isApproved = computed(() => props.pendingVendors.every(vendor => vendor.is_approved));
+
+onMounted(() => {
+    console.log('Pending Vendors:', props.pendingVendors);
+});
+
 </script>
 
 <template>
@@ -55,16 +58,16 @@ const stats = [
                         <button class="text-sm font-medium text-indigo-600 hover:underline">View All</button>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="i in 5" :key="i" class="p-4 transition-colors hover:bg-gray-50">
+                        <div v-for="vendor in props.pendingVendors" :key="vendor.id" class="p-4 transition-colors hover:bg-gray-50">
                             <div class="flex items-center space-x-4">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                                    <span class="text-sm font-bold">AL</span>
+                                    <span class="text-sm font-bold">{{ vendor.name.substring(0, 2) }}</span>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-900">New vendor registration request</p>
-                                    <p class="text-xs text-gray-500">2 minutes ago • ID: #45892</p>
+                                    <p class="text-sm font-medium text-gray-900">New vendor request: {{ vendor.name }}</p>
+                                    <p class="text-xs text-gray-500">{{ format.format(vendor.updated_at, { dateStyle: 'short', timeStyle: 'short' }) }} • ID: #{{ vendor.id }}</p>
                                 </div>
-                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">Pending</span>
+                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">{{ isApproved? 'success': 'pending' }} </span>
                             </div>
                         </div>
                     </div>
