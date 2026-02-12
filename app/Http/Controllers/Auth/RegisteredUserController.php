@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\RoleAssignmentService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, RoleAssignmentService $roleAssignmentService): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -37,18 +38,9 @@ class RegisteredUserController extends Controller
             'isVendor' => 'nullable|boolean',
         ]);
 
-        $adminEmails = ['admin@gmail.com'];
+        $roleStatus = $roleAssignmentService->determineRoleForRegistration($request);
+        $role = $roleAssignmentService->getRoleByStatus($roleStatus);
 
-        $roleStatus = in_array($request->email, $adminEmails)
-            ? \App\Enums\RoleStatus::ADMIN
-            : \App\Enums\RoleStatus::CUSTOMER;
-
-        if ($request->boolean('isVendor')) {
-            $roleStatus = \App\Enums\RoleStatus::VENDOR;
-        }
-
-        $role = \App\Models\Role::where('name', $roleStatus->value)->first();
-        // dd($role);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
