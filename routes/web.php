@@ -12,14 +12,18 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         // Handled by redirect.dashboard middleware
-    })->middleware(['redirect.dashboard'])->name('dashboard');
+    })->middleware(['vendor.approval', 'redirect.dashboard'])->name('dashboard');
 
 });
+
+Route::middleware('auth')->get('/vendor/pending-approval', function (\Illuminate\Http\Request $request) {
+    return Inertia::render('Auth/PendingApproval', ['user' => $request->user()]);
+})->name('vendor.pending-approval');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

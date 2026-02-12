@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\UserRole::class,
             'redirect.dashboard' => \App\Http\Middleware\RedirectWithUserType::class,
+            'vendor.approval' => \App\Http\Middleware\VendorApproveStatus::class,
         ]);
 
         $middleware->web(append: [
