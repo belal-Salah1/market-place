@@ -46,6 +46,14 @@ public function ordersCountByStatus(){
     ->groupBy('status')
     ->get();
     return $ordersCountByStatus;
+}   
+
+public function ordersTotalPriceByStatus(){
+    $ordersTotalPriceByStatus = DB::table('orders')
+    ->select('status', DB::raw('sum(total_price) as total_price'))
+    ->groupBy('status')
+    ->get();
+    return $ordersTotalPriceByStatus;
 }
 
 
