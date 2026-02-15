@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             OrderItemSeeder::class,
             PaymentSeeder::class,
+            ReviewSeeder::class,
         ]);
 
         $adminRole = \App\Models\Role::where('name', \App\Enums\RoleStatus::ADMIN->value)->first();

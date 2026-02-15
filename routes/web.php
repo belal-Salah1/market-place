@@ -5,6 +5,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReviewsReportController;
+use App\Http\Controllers\CategoryReportController;
+use App\Http\Controllers\CustomersReportController;
+use App\Http\Controllers\OrdersReportController;
+use App\Http\Controllers\PaymentsReportController;
+use App\Http\Controllers\ProductsReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -63,5 +68,42 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/reports/reviews', [ReviewsReportController::class, 'index'])->name('reports.reviews.index');
 Route::get('/reports/reviews/by-customer', [ReviewsReportController::class, 'byCustomer'])->name('reports.reviews.by-customer');
+
+// Reports - Categories
+
+Route::get('/reports/categories', [CategoryReportController::class, 'index'])->name('reports.categories.index');
+Route::get('/reports/categories/products', [CategoryReportController::class, 'productsSold'])->name('reports.categories.products');
+Route::get('/reports/categories/revenue', [CategoryReportController::class, 'revenue'])->name('reports.categories.revenue');
+Route::get('/reports/categories/parent', [CategoryReportController::class, 'parent'])->name('reports.categories.parent');
+Route::get('/reports/categories/sub', [CategoryReportController::class, 'sub'])->name('reports.categories.sub');
+
+// Reports - Customers
+
+Route::get('/reports/customers', [CustomersReportController::class, 'index'])->name('reports.customers.index');
+Route::get('/reports/customers/by-role', [CustomersReportController::class, 'byRole'])->name('reports.customers.by-role');
+Route::get('/reports/customers/top-vendors', [CustomersReportController::class, 'topVendors'])->name('reports.customers.top-vendors');
+Route::get('/reports/customers/top-customers', [CustomersReportController::class, 'topCustomers'])->name('reports.customers.top-customers');
+Route::get('/reports/customers/top-all', [CustomersReportController::class, 'topAll'])->name('reports.customers.top-all');
+
+// Reports - Orders
+
+Route::get('/reports/orders', [OrdersReportController::class, 'index'])->name('reports.orders.index');
+Route::get('/reports/orders/daily', [OrdersReportController::class, 'daily'])->name('reports.orders.daily');
+Route::get('/reports/orders/weekly', [OrdersReportController::class, 'weekly'])->name('reports.orders.weekly');
+Route::get('/reports/orders/monthly', [OrdersReportController::class, 'monthly'])->name('reports.orders.monthly');
+Route::get('/reports/orders/total-price', [OrdersReportController::class, 'totalPrice'])->name('reports.orders.total-price');
+Route::get('/reports/orders/average-price', [OrdersReportController::class, 'averagePrice'])->name('reports.orders.average-price');
+Route::get('/reports/orders/by-status', [OrdersReportController::class, 'byStatus'])->name('reports.orders.by-status');
+Route::get('/reports/orders/price-by-status', [OrdersReportController::class, 'priceByStatus'])->name('reports.orders.price-by-status');
+
+// Reports - Payments
+
+Route::get('/reports/payments/by-status', [PaymentsReportController::class, 'byStatus'])->name('reports.payments.by-status');
+Route::get('/reports/payments/by-method', [PaymentsReportController::class, 'byMethod'])->name('reports.payments.by-method');
+
+// Reports - Products
+
+Route::get('/reports/products', [ProductsReportController::class, 'index'])->name('reports.products.index');
+Route::get('/reports/products/revenue', [ProductsReportController::class, 'revenue'])->name('reports.products.revenue');
 
 require __DIR__.'/auth.php';
