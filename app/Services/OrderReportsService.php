@@ -40,5 +40,13 @@ public function averageOrderPrice(){
     return $averageOrderPrice;
 }
 
+public function ordersCountByStatus(){
+    $ordersCountByStatus = DB::table('orders')
+    ->select('status', DB::raw('count(*) as total'))
+    ->groupBy('status')
+    ->get();
+    return $ordersCountByStatus;
+}
+
 
 }
