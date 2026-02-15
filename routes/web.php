@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
-use App\Models\User;
+use App\Http\Controllers\ReviewsReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,5 +58,10 @@ Route::middleware('auth')->group(function () {
 // Route::post('/admin/vendors/{user}/reject', [AdminController::class, 'reject'])
 //     ->middleware('role:admin')
 //     ->name('admin.vendors.reject');
+
+// Reports - Reviews
+
+Route::get('/reports/reviews', [ReviewsReportController::class, 'index'])->name('reports.reviews.index');
+Route::get('/reports/reviews/by-customer', [ReviewsReportController::class, 'byCustomer'])->name('reports.reviews.by-customer');
 
 require __DIR__.'/auth.php';
