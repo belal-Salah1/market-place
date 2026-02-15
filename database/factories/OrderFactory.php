@@ -19,8 +19,8 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id' => User::factory(),
-            'total_price' => $this->faker->numberBetween(1, 1000),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'failed']),
+            'total_price' => fake()->numberBetween(1, 1000),
+            'status' => fake()->randomElement(['pending', 'completed', 'failed']),
         ];
     }
 }
