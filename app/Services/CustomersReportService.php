@@ -21,7 +21,7 @@ public function totalCountOfCustmersByRole(){
 
 public function topPerformanceVendors(){
     $topPerformanceVendors = DB::table('users')
-    ->join('orders','users.id','=','orders.user_id')
+    ->join('orders','users.id','=','orders.customer_id')
     ->join('roles','users.role_id','=','roles.id')
     ->where('roles.name', 'vendor')
     ->select('users.name', DB::raw('sum(orders.total_price) as total'))
@@ -32,7 +32,7 @@ public function topPerformanceVendors(){
 }
 public function topPerformanceCustomers(){
     $topPerformanceCustomers = DB::table('users')
-    ->join('orders','users.id','=','orders.user_id')
+    ->join('orders','users.id','=','orders.customer_id')
     ->join('roles','users.role_id','=','roles.id')
     ->where('roles.name', 'customer')
     ->select('users.name', DB::raw('sum(orders.total_price) as total'))
@@ -44,7 +44,7 @@ public function topPerformanceCustomers(){
 
 public function topPerformanceAtAll(){
     $topPerformanceVendors = DB::table('users')
-        ->join('orders','users.id','=','orders.user_id')
+        ->join('orders','users.id','=','orders.customer_id')
         ->join('roles','users.role_id','=','roles.id')
         ->select('users.id', 'users.name', DB::raw('SUM(orders.total_price) as total'))
         ->groupBy('users.id', 'users.name')
