@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class ProductReportsServices{
 
 
-public function totalRevenue(){
+public function getTotalRevenue(){
     $totalRevenue = DB::table('products')->sum('price');
     return $totalRevenue;
 }
