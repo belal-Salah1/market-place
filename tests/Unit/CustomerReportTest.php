@@ -85,6 +85,7 @@ test('should reutrn top performance customers', function () {
 });
 
 test('should return topPerformance at all', function () {
+    $vendorRole = Role::firstWhere('name', RoleStatus::VENDOR->value);
     $customerRole = Role::firstWhere('name', RoleStatus::CUSTOMER->value);
     $adminRole = Role::firstWhere('name', RoleStatus::ADMIN->value);
 
