@@ -13,7 +13,7 @@ class RoleAssignmentService
      */
     public function determineRoleForRegistration(Request $request): RoleStatus
     {
-        $adminEmails = config('auth.admin_emails', []);
+        $adminEmails = config('roles.admin_emails', []);
 
         if (in_array($request->email, $adminEmails)) {
             return RoleStatus::ADMIN;
