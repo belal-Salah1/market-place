@@ -1,15 +1,16 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\VendorController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ReviewsReportController;
 use App\Http\Controllers\CategoryReportController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsReportController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewsReportController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,8 +27,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard - redirects via middleware based on role
-    Route::get('/dashboard', function () {
-    })->middleware(['vendor.approval', 'redirect.dashboard'])->name('dashboard');
+    Route::get('/dashboard', function () {})->middleware(['vendor.approval', 'redirect.dashboard'])->name('dashboard');
 
     // Default fallback dashboard
     Route::get('/dashboard/default', function (Request $request) {
@@ -50,15 +50,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Vendor pending approval (not protected by vendor.approval to avoid loop)
-Route::middleware('auth')->get('/vendor/pending-approval',[VendorController::class, 'pendingApproval'] )->name('vendor.pending-approval');
+Route::middleware('auth')->get('/vendor/pending-approval', [VendorController::class, 'pendingApproval'])->name('vendor.pending-approval');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 // Route::post('/admin/vendors/{user}/reject', [AdminController::class, 'reject'])
 //     ->middleware('role:admin')
@@ -105,5 +103,11 @@ Route::get('/reports/payments/by-method', [PaymentsReportController::class, 'byM
 
 Route::get('/reports/products', [ProductsReportController::class, 'index'])->name('reports.products.index');
 Route::get('/reports/products/revenue', [ProductsReportController::class, 'revenue'])->name('reports.products.revenue');
+
+// Route for vendor products
+
+Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
+    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('vendor.products.create');
+});
 
 require __DIR__.'/auth.php';

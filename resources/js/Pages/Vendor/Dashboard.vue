@@ -17,7 +17,17 @@ const vendorStats = [
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-bold text-gray-800">Vendor Dashboard</h2>
-                <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700">
+                <Link :href="route('vendor.products.create')">
+                    <button
+                        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+                    >
+                        + Add New Product
+                    </button>
+                </Link>
+                <button
+                    @click="$inertia.visit(route('vendor.products.create'))"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+                >
                     + Add New Product
                 </button>
             </div>
