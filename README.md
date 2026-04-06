@@ -82,6 +82,36 @@ The app has three user roles, each with a dedicated dashboard and feature set:
 | `coupons` | Vendor discount coupons with type, value, expiry, and usage tracking |
 | `messages` | Conversation messages between users with read timestamps |
 
+## How Roles Are Assigned
+
+Roles are automatically assigned during registration based on these rules:
+
+| Condition | Assigned Role |
+|-----------|---------------|
+| Email is `admin@gmail.com` | **Admin** |
+| "Register as Vendor" toggle is checked | **Vendor** (requires admin approval before access) |
+| Default (no toggle, non-admin email) | **Customer** |
+
+### Admin Access
+
+Register with the email **`admin@gmail.com`** — the app automatically assigns the admin role. Admin emails are configured in `config/roles.php`:
+
+```php
+'admin_emails' => [
+    'admin@gmail.com',
+],
+```
+
+You can add more admin emails to this array.
+
+### Vendor Access
+
+Check the **"Register as Vendor"** toggle on the registration page. After registering, the vendor account is **pending approval** — an admin must approve it from the Admin Dashboard before the vendor can access the platform.
+
+### Customer Access
+
+Register normally without checking the vendor toggle. No approval needed — customers get immediate access.
+
 ## Getting Started
 
 ### Prerequisites
