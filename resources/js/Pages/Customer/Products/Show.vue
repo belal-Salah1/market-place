@@ -113,9 +113,18 @@ function submit() {
 
                                 <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">{{ product.name }}</h1>
 
-                                <p v-if="product.vendor" class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                                    Sold by <span class="font-medium text-gray-700 dark:text-gray-300">{{ product.vendor.name }}</span>
-                                </p>
+                                <div v-if="product.vendor" class="mb-4 flex items-center gap-3">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        Sold by <span class="font-medium text-gray-700 dark:text-gray-300">{{ product.vendor.name }}</span>
+                                    </p>
+                                    <Link
+                                        :href="route('messages.show', product.vendor.id)"
+                                        class="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
+                                    >
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                                        Message Vendor
+                                    </Link>
+                                </div>
 
                                 <p class="mb-6 text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(product.price) }}</p>
 

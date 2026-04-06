@@ -3,13 +3,17 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryReportController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomersReportController;
+use App\Http\Controllers\EarningsController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewsReportController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Foundation\Application;
@@ -140,6 +144,33 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/vendor/categories/{category}/edit', [CategoryController::class, 'edit'])->name('vendor.categories.edit');
     Route::put('/vendor/categories/{category}', [CategoryController::class, 'update'])->name('vendor.categories.update');
     Route::delete('/vendor/categories/{category}', [CategoryController::class, 'destroy'])->name('vendor.categories.destroy');
+
+    // Vendor coupons
+    Route::get('/vendor/coupons', [CouponController::class, 'index'])->name('vendor.coupons.index');
+    Route::get('/vendor/coupons/create', [CouponController::class, 'create'])->name('vendor.coupons.create');
+    Route::post('/vendor/coupons', [CouponController::class, 'store'])->name('vendor.coupons.store');
+    Route::delete('/vendor/coupons/{coupon}', [CouponController::class, 'destroy'])->name('vendor.coupons.destroy');
+    Route::patch('/vendor/coupons/{coupon}/toggle', [CouponController::class, 'toggle'])->name('vendor.coupons.toggle');
+
+    // Vendor earnings
+    Route::get('/vendor/earnings', [EarningsController::class, 'index'])->name('vendor.earnings.index');
+
+    // Vendor reviews
+    Route::get('/vendor/reviews', [ReviewController::class, 'vendorReviews'])->name('vendor.reviews.index');
+});
+
+// Customer routes
+Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
+    // Reviews
+    Route::get('/customer/products/{product}/review', [ReviewController::class, 'create'])->name('customer.reviews.create');
+    Route::post('/customer/products/{product}/review', [ReviewController::class, 'store'])->name('customer.reviews.store');
+});
+
+// Messages (shared between vendor and customer)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{user}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
 });
 
 require __DIR__.'/auth.php';

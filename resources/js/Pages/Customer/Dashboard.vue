@@ -82,7 +82,7 @@ function statusBadgeClasses(status: string): string {
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <Link
                         :href="route('customer.products.index')"
                         class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
@@ -148,6 +148,23 @@ function statusBadgeClasses(status: string): string {
                         >
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
+                    </Link>
+                    <Link
+                        :href="route('messages.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
+                        data-gsap-delay="0.45"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-500/10">
+                                <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">Messages</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Chat with vendors</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-blue-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
                     </Link>
                 </div>
 

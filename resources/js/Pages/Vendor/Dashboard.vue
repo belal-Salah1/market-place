@@ -149,7 +149,7 @@ function formatDate(dateStr: string): string {
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <Link
                         :href="route('vendor.products.index')"
                         class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
@@ -249,6 +249,23 @@ function formatDate(dateStr: string): string {
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
                     </Link>
+                    <Link
+                        :href="route('vendor.reviews.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
+                        data-gsap-delay="0.45"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-500/10">
+                                <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 transition-colors group-hover:text-amber-600 dark:text-gray-100 dark:group-hover:text-amber-400">Reviews</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">View customer reviews</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-amber-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </Link>
                 </div>
 
                 <!-- Recent Orders / Quick Actions -->
@@ -328,75 +345,48 @@ function formatDate(dateStr: string): string {
                     >
                         <h3 class="mb-6 text-lg font-bold text-gray-800 dark:text-gray-100">Quick Actions</h3>
                         <div class="space-y-3">
-                            <button
-                                class="group w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
+                            <Link
+                                :href="route('vendor.earnings.index')"
+                                class="group block w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
                             >
                                 <div class="flex items-center space-x-3">
-                                    <div
-                                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-100 dark:bg-emerald-500/10 dark:group-hover:bg-emerald-500/20"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                        </svg>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-100 dark:bg-emerald-500/10 dark:group-hover:bg-emerald-500/20">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">
-                                            View Earnings
-                                        </p>
+                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">View Earnings</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">View earnings overview</p>
                                     </div>
                                 </div>
-                            </button>
-                            <button
-                                class="group w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
+                            </Link>
+                            <Link
+                                :href="route('vendor.coupons.index')"
+                                class="group block w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
                             >
                                 <div class="flex items-center space-x-3">
-                                    <div
-                                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600 transition-colors group-hover:bg-violet-100 dark:bg-violet-500/10 dark:group-hover:bg-violet-500/20"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                            />
-                                        </svg>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600 transition-colors group-hover:bg-violet-100 dark:bg-violet-500/10 dark:group-hover:bg-violet-500/20">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">
-                                            Manage Coupons
-                                        </p>
+                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">Manage Coupons</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Create and manage coupons</p>
                                     </div>
                                 </div>
-                            </button>
-                            <button
-                                class="group w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
+                            </Link>
+                            <Link
+                                :href="route('messages.index')"
+                                class="group block w-full rounded-xl border border-gray-100/80 bg-white/60 p-4 text-left transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-sm dark:border-[#2e3039] dark:bg-[#1a1d23]/60 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10"
                             >
                                 <div class="flex items-center space-x-3">
-                                    <div
-                                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-500/10 dark:group-hover:bg-blue-500/20"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                                            />
-                                        </svg>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-500/10 dark:group-hover:bg-blue-500/20">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">
-                                            Customer Messages
-                                        </p>
+                                        <p class="font-semibold text-gray-700 group-hover:text-indigo-700 dark:text-gray-200 dark:group-hover:text-indigo-400">Customer Messages</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">View and reply to messages</p>
                                     </div>
                                 </div>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
