@@ -2,6 +2,10 @@
 
 A full-featured multi-role marketplace application built with **Laravel 12**, **Inertia.js v2**, **Vue 3**, and **Tailwind CSS**. Features role-based dashboards, real-time stats, dark mode, and GSAP animations.
 
+## Demo
+
+![Crystal Market Demo](ezgif.com-animated-gif-maker.gif)
+
 ## Tech Stack
 
 - **Backend**: Laravel 12, PHP 8.3
