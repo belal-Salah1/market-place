@@ -25,62 +25,156 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <!-- Icon -->
+        <div class="mb-6 flex justify-center animate-scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+                <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                    />
+                </svg>
+            </div>
+        </div>
 
-                <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+                Create your account
+            </h1>
+            <p class="mt-2 text-sm text-gray-500 animate-fade-in-up delay-2">
+                Join our marketplace and get started today
+            </p>
+        </div>
 
-                <InputError class="mt-2" :message="form.errors.name" />
+        <form @submit.prevent="submit" class="space-y-5">
+            <!-- Name -->
+            <div class="animate-fade-in-up delay-3">
+                <InputLabel for="name" value="Full name" />
+                <TextInput
+                    id="name"
+                    type="text"
+                    class="mt-1.5 block w-full"
+                    v-model="form.name"
+                    required
+                    autofocus
+                    autocomplete="name"
+                    placeholder="John Doe"
+                />
+                <InputError class="mt-1.5" :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+            <!-- Email -->
+            <div class="animate-fade-in-up delay-4">
+                <InputLabel for="email" value="Email address" />
+                <TextInput
+                    id="email"
+                    type="email"
+                    class="mt-1.5 block w-full"
+                    v-model="form.email"
+                    required
+                    autocomplete="username"
+                    placeholder="you@example.com"
+                />
+                <InputError class="mt-1.5" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <!-- Password -->
+            <div class="animate-fade-in-up delay-5">
                 <InputLabel for="password" value="Password" />
-
-                <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <TextInput
+                    id="password"
+                    type="password"
+                    class="mt-1.5 block w-full"
+                    v-model="form.password"
+                    required
+                    autocomplete="new-password"
+                    placeholder="Create a strong password"
+                />
+                <InputError class="mt-1.5" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
+            <!-- Confirm Password -->
+            <div class="animate-fade-in-up delay-6">
+                <InputLabel for="password_confirmation" value="Confirm password" />
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    placeholder="Confirm your password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-            <div class="mt-4">
-                <label>
-                    <input type="checkbox" v-model="form.isVendor" />
-                    I want to sell products (Vendor)
-                </label>
+                <InputError class="mt-1.5" :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+            <!-- Vendor toggle card -->
+            <div
+                class="animate-fade-in-up delay-7 cursor-pointer rounded-xl border-2 p-4 transition-all duration-200"
+                :class="form.isVendor
+                    ? 'border-indigo-500 bg-indigo-50/60 ring-2 ring-indigo-500/20'
+                    : 'border-gray-200 bg-gray-50 hover:border-gray-300'"
+                @click="form.isVendor = !form.isVendor"
+            >
+                <div class="flex items-center gap-3">
+                    <!-- Shop Icon -->
+                    <div
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors duration-200"
+                        :class="form.isVendor ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'"
+                    >
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"
+                            />
+                        </svg>
+                    </div>
+
+                    <!-- Text -->
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-gray-900">
+                            I want to sell products
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            Register as a vendor to list and sell your products
+                        </p>
+                    </div>
+
+                    <!-- Toggle indicator -->
+                    <div
+                        class="relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200"
+                        :class="form.isVendor ? 'bg-indigo-600' : 'bg-gray-300'"
+                    >
+                        <div
+                            class="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"
+                            :class="form.isVendor ? 'translate-x-5' : 'translate-x-0.5'"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="animate-fade-in-up delay-7">
+                <PrimaryButton
+                    class="btn-sweep w-full justify-center py-2.5"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
                 >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Register </PrimaryButton>
+                    Create account
+                </PrimaryButton>
             </div>
         </form>
+
+        <!-- Login link -->
+        <div class="mt-8 border-t border-gray-100 pt-6 text-center animate-fade-in delay-7">
+            <p class="text-sm text-gray-500">
+                Already have an account?
+                <Link
+                    :href="route('login')"
+                    class="font-semibold text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
+                >
+                    Sign in
+                </Link>
+            </p>
+        </div>
     </GuestLayout>
 </template>

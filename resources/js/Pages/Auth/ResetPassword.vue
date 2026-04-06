@@ -35,65 +35,81 @@ const submit = () => {
     <GuestLayout>
         <Head title="Reset Password" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+        <!-- Icon -->
+        <div class="mb-6 flex justify-center animate-scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+                <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                    />
+                </svg>
+            </div>
+        </div>
 
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+                Choose a new password
+            </h1>
+            <p class="mt-2 text-sm text-gray-500 animate-fade-in-up delay-2">
+                Enter your new password below to regain access to your account.
+            </p>
+        </div>
+
+        <form @submit.prevent="submit" class="space-y-5">
+            <!-- Email -->
+            <div class="animate-fade-in-up delay-3">
+                <InputLabel for="email" value="Email address" />
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-1.5" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
+            <!-- Password -->
+            <div class="animate-fade-in-up delay-4">
+                <InputLabel for="password" value="New password" />
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    placeholder="Enter new password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-1.5" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
+            <!-- Confirm Password -->
+            <div class="animate-fade-in-up delay-5">
+                <InputLabel for="password_confirmation" value="Confirm new password" />
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    placeholder="Confirm new password"
                 />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <InputError class="mt-1.5" :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <!-- Submit -->
+            <div class="animate-fade-in-up delay-6">
                 <PrimaryButton
+                    class="btn-sweep w-full justify-center py-2.5"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Reset Password
+                    Reset password
                 </PrimaryButton>
             </div>
         </form>

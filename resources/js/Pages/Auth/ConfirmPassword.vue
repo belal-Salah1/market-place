@@ -21,29 +21,48 @@ const submit = () => {
     <GuestLayout>
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your
-            password before continuing.
+        <!-- Icon -->
+        <div class="mb-6 flex justify-center animate-scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+                <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                </svg>
+            </div>
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+                Confirm your identity
+            </h1>
+            <p class="mt-2 text-sm leading-relaxed text-gray-500 animate-fade-in-up delay-2">
+                This is a secure area of the application. Please confirm your password before continuing.
+            </p>
+        </div>
+
+        <form @submit.prevent="submit" class="space-y-5">
+            <!-- Password -->
+            <div class="animate-fade-in-up delay-3">
                 <InputLabel for="password" value="Password" />
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
                     autofocus
+                    placeholder="Enter your password"
                 />
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-1.5" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4 flex justify-end">
+            <!-- Submit -->
+            <div class="animate-fade-in-up delay-4">
                 <PrimaryButton
-                    class="ms-4"
+                    class="btn-sweep w-full justify-center py-2.5"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

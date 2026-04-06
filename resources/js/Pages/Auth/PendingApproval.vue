@@ -22,76 +22,90 @@ defineProps({
         <Head title="Pending Approval" />
 
         <div class="text-center">
-            <!-- Icon -->
-            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100">
-                <svg
-                    class="h-10 w-10 text-yellow-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
+            <!-- Icon (amber themed) -->
+            <div class="mx-auto mb-6 flex justify-center animate-scale-in">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200">
+                    <svg
+                        class="h-8 w-8 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                </div>
             </div>
 
             <!-- Title -->
-            <h2 class="mb-2 text-2xl font-bold text-gray-900">
+            <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
                 Registration Pending
-            </h2>
+            </h1>
 
             <!-- Message -->
-            <div class="mb-6 space-y-3 text-gray-600">
-                <p class="text-base">
+            <div class="mb-6 space-y-2 animate-fade-in-up delay-2">
+                <p class="text-sm text-gray-600">
                     Thank you for registering as a vendor,
                     <span class="font-semibold text-gray-900">{{ user.name }}</span>!
                 </p>
-                <p class="text-sm">
+                <p class="text-sm leading-relaxed text-gray-500">
                     Your account is currently pending approval from our admin team.
-                    You'll receive an email notification once your account has been reviewed and approved.
+                    You'll receive an email notification once your account has been reviewed.
                 </p>
             </div>
 
             <!-- Info Box -->
-            <div class="mb-6 rounded-lg bg-blue-50 p-4 text-left">
-                <div class="flex">
+            <div class="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 text-left animate-fade-in-up delay-3">
+                <div class="flex gap-3">
                     <div class="shrink-0">
-                        <svg
-                            class="h-5 w-5 text-blue-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
+                            <svg
+                                class="h-4 w-4 text-indigo-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
                     </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-blue-800">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">
                             What happens next?
                         </h3>
-                        <div class="mt-2 text-sm text-blue-700">
-                            <ul class="list-inside list-disc space-y-1">
-                                <li>Our team will review your vendor registration</li>
-                                <li>This typically takes 1-2 business days</li>
-                                <li>You'll receive an email at <span class="font-semibold">{{ user.email }}</span></li>
-                                <li>Once approved, you can log in and start selling</li>
-                            </ul>
-                        </div>
+                        <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
+                            <li class="flex items-start gap-2 animate-fade-in-up delay-4">
+                                <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                                Our team will review your vendor registration
+                            </li>
+                            <li class="flex items-start gap-2 animate-fade-in-up delay-5">
+                                <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                                This typically takes 1-2 business days
+                            </li>
+                            <li class="flex items-start gap-2 animate-fade-in-up delay-6">
+                                <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                                You'll receive an email at <span class="font-semibold text-gray-900">{{ user.email }}</span>
+                            </li>
+                            <li class="flex items-start gap-2 animate-fade-in-up delay-7">
+                                <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                                Once approved, you can log in and start selling
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <!-- Actions -->
-            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center animate-fade-in-up delay-7">
                 <Link :href="route('home')">
-                    <PrimaryButton type="button" class="w-full sm:w-auto">
+                    <PrimaryButton type="button" class="btn-sweep w-full justify-center sm:w-auto">
                         Back to Home
                     </PrimaryButton>
                 </Link>
@@ -105,12 +119,12 @@ defineProps({
             </div>
 
             <!-- Support Contact -->
-            <div class="mt-6 border-t border-gray-200 pt-6">
+            <div class="mt-6 border-t border-gray-100 pt-6 animate-fade-in delay-7">
                 <p class="text-xs text-gray-500">
                     Have questions?
                     <a
                         href="mailto:support@example.com"
-                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                        class="font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
                     >
                         Contact our support team
                     </a>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryReportController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomersReportController;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -108,6 +110,8 @@ Route::get('/reports/products/revenue', [ProductsReportController::class, 'reven
 
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('vendor.products.create');
+    Route::post('/vendor/products', [ProductController::class, 'store'])->name('vendor.products.store');
+    Route::post('/vendor/categories/create', [CategoryController::class, 'store'])->name('vendor.categories.create');
 });
 
 require __DIR__.'/auth.php';
