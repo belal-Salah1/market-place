@@ -122,11 +122,13 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::post('/vendor/products', [ProductController::class, 'store'])->name('vendor.products.store');
     Route::get('/vendor/products/{product}/edit', [ProductController::class, 'edit'])->name('vendor.products.edit');
     Route::put('/vendor/products/{product}', [ProductController::class, 'update'])->name('vendor.products.update');
+    Route::delete('/vendor/products/{product}', [ProductController::class, 'destroy'])->name('vendor.products.destroy');
     Route::get('/vendor/categories', [CategoryController::class, 'index'])->name('vendor.categories.index');
     Route::get('/vendor/categories/create', [CategoryController::class, 'create'])->name('vendor.categories.create');
     Route::post('/vendor/categories/', [CategoryController::class, 'store'])->name('vendor.categories.store');
     Route::get('/vendor/categories/{category}/edit', [CategoryController::class, 'edit'])->name('vendor.categories.edit');
     Route::put('/vendor/categories/{category}', [CategoryController::class, 'update'])->name('vendor.categories.update');
+    Route::delete('/vendor/categories/{category}', [CategoryController::class, 'destroy'])->name('vendor.categories.destroy');
 });
 
 require __DIR__.'/auth.php';

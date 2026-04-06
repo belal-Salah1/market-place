@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+
+const deleteProduct = (id: number) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+        router.delete(route('vendor.products.destroy', id));
+    }
+};
 
 interface Category {
     id: number;
@@ -124,6 +130,12 @@ defineProps<{
                                 >
                                     Edit
                                 </Link>
+                                <button
+                                    @click="deleteProduct(product.id)"
+                                    class="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-100"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     </div>

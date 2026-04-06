@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+
+const deleteCategory = (id: number) => {
+    if (confirm('Are you sure you want to delete this category?')) {
+        router.delete(route('vendor.categories.destroy', id));
+    }
+};
 
 interface Category {
     id: number;
@@ -89,12 +95,20 @@ defineProps<{
                                     <p v-else class="mt-0.5 text-xs text-gray-400">Top-level category</p>
                                 </div>
                             </div>
-                            <Link
-                                :href="route('vendor.categories.edit', category.id)"
-                                class="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition-colors hover:bg-indigo-100"
-                            >
-                                Edit
-                            </Link>
+                            <div class="flex gap-2">
+                                <Link
+                                    :href="route('vendor.categories.edit', category.id)"
+                                    class="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition-colors hover:bg-indigo-100"
+                                >
+                                    Edit
+                                </Link>
+                                <button
+                                    @click="deleteCategory(category.id)"
+                                    class="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-100"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
 
                         <div class="mt-4 flex items-center gap-3">
