@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -8,6 +9,15 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const showFlash = ref(false);
+const page = usePage();
+
+onMounted(() => {
+    if (page.props.flash?.success || page.props.flash?.error) {
+        showFlash.value = true;
+        setTimeout(() => { showFlash.value = false; }, 4000);
+    }
+});
 </script>
 
 <template>
@@ -114,6 +124,43 @@ const showingNavigationDropdown = ref(false);
                     <slot name="header" />
                 </div>
             </header>
+
+            <!-- Flash Messages -->
+            <Transition
+                enter-active-class="transition duration-300 ease-out"
+                enter-from-class="opacity-0 -translate-y-3"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-200 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 -translate-y-3"
+            >
+                <div v-if="showFlash && ($page.props.flash?.success || $page.props.flash?.error)" class="relative z-20 mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+                    <div
+                        v-if="$page.props.flash?.success"
+                        class="flex items-center gap-3 rounded-xl border border-emerald-200/60 bg-emerald-50/80 px-4 py-3 shadow-sm backdrop-blur-sm"
+                    >
+                        <svg class="h-5 w-5 shrink-0 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <p class="text-sm font-medium text-emerald-800">{{ $page.props.flash.success }}</p>
+                        <button @click="showFlash = false" class="ml-auto text-emerald-400 transition-colors hover:text-emerald-600">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    <div
+                        v-if="$page.props.flash?.error"
+                        class="flex items-center gap-3 rounded-xl border border-red-200/60 bg-red-50/80 px-4 py-3 shadow-sm backdrop-blur-sm"
+                    >
+                        <svg class="h-5 w-5 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                        <p class="text-sm font-medium text-red-800">{{ $page.props.flash.error }}</p>
+                        <button @click="showFlash = false" class="ml-auto text-red-400 transition-colors hover:text-red-600">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </Transition>
 
             <!-- Content -->
             <main class="relative z-10">
