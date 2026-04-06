@@ -81,6 +81,48 @@ const vendorStats = [
                     </div>
                 </div>
 
+                <!-- Navigation Links -->
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Link
+                        :href="route('vendor.products.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md animate-fade-in-up delay-4"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100">
+                                <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">My Products</p>
+                                <p class="text-xs text-gray-500">View all your products</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
+                    <Link
+                        :href="route('vendor.categories.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md animate-fade-in-up delay-5"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+                                <svg class="h-5 w-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors">My Categories</p>
+                                <p class="text-xs text-gray-500">View all your categories</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
+                </div>
+
                 <!-- Sales Chart Mockup / Quick Actions -->
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     <div class="animate-fade-in-up delay-4 rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm shadow-sm p-6 lg:col-span-2">
