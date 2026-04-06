@@ -52,8 +52,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('role:admin')
         ->name('admin.vendors.show');
 
-    // Vendor dashboard
+    // Vendor dashboard & orders
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->middleware('role:vendor')->name('vendor.dashboard');
+    Route::get('/vendor/orders', [VendorController::class, 'orders'])->middleware('role:vendor')->name('vendor.orders.index');
+    Route::get('/vendor/orders/{order}', [VendorController::class, 'orderShow'])->middleware('role:vendor')->name('vendor.orders.show');
 
     // Customer dashboard
     Route::get('/customer/dashboard', [CustomerController::class, 'index'])->middleware('role:customer')->name('customer.dashboard');
