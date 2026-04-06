@@ -111,7 +111,8 @@ Route::get('/reports/products/revenue', [ProductsReportController::class, 'reven
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('vendor.products.create');
     Route::post('/vendor/products', [ProductController::class, 'store'])->name('vendor.products.store');
-    Route::post('/vendor/categories/create', [CategoryController::class, 'store'])->name('vendor.categories.create');
+    Route::get('/vendor/categories/create', [CategoryController::class, 'create'])->name('vendor.categories.create');
+    Route::post('/vendor/categories/', [CategoryController::class, 'store'])->name('vendor.categories.store');
 });
 
 require __DIR__.'/auth.php';
