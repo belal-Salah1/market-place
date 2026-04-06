@@ -120,9 +120,13 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.products.index');
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('vendor.products.create');
     Route::post('/vendor/products', [ProductController::class, 'store'])->name('vendor.products.store');
+    Route::get('/vendor/products/{product}/edit', [ProductController::class, 'edit'])->name('vendor.products.edit');
+    Route::put('/vendor/products/{product}', [ProductController::class, 'update'])->name('vendor.products.update');
     Route::get('/vendor/categories', [CategoryController::class, 'index'])->name('vendor.categories.index');
     Route::get('/vendor/categories/create', [CategoryController::class, 'create'])->name('vendor.categories.create');
     Route::post('/vendor/categories/', [CategoryController::class, 'store'])->name('vendor.categories.store');
+    Route::get('/vendor/categories/{category}/edit', [CategoryController::class, 'edit'])->name('vendor.categories.edit');
+    Route::put('/vendor/categories/{category}', [CategoryController::class, 'update'])->name('vendor.categories.update');
 });
 
 require __DIR__.'/auth.php';

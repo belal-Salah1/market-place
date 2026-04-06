@@ -118,6 +118,12 @@ defineProps<{
                                     <p class="text-sm font-bold text-gray-900">${{ Number(product.price).toFixed(2) }}</p>
                                     <p class="text-[11px] text-gray-400">{{ product.stock }} in stock</p>
                                 </div>
+                                <Link
+                                    :href="route('vendor.products.edit', product.id)"
+                                    class="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition-colors hover:bg-indigo-100"
+                                >
+                                    Edit
+                                </Link>
                             </div>
                         </div>
                     </div>

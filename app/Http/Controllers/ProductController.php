@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -67,15 +69,40 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $this->authorizeVendor($product);
+
+        $categories = Category::all(['id', 'name', 'parent_id']);
+
+        return Inertia::render('Vendor/Products/Edit', [
+            'product' => $product->load('category'),
+            'categories' => $categories,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            unset($validated['image']);
+        }
+
+        $product->update($validated);
+
+        return redirect()->route('vendor.products.index')->with('success', 'Product updated successfully');
+    }
+
+    private function authorizeVendor(Product $product): void
+    {
+        abort_unless(auth()->id() === $product->vendor_id, 403);
     }
 
     /**
