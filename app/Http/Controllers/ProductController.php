@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,7 +20,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Vendor/Products/Create');
+        $categories = Category::all(['id', 'name', 'parent_id']);
+
+        return Inertia::render('Vendor/Products/Create', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -28,11 +33,12 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $validated = $request->validated();
-        
+        $validated['vendor_id'] = $request->user()->id;
+
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('products', 'public');
         }
-        
+
         $product = Product::create($validated);
 
         return redirect()->route('vendor.dashboard')->with('success', 'Product created successfully');

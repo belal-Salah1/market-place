@@ -79,7 +79,7 @@ const submit = () => {
                                     type="text"
                                     v-model="form.name"
                                     placeholder="e.g. Electronics, Fashion, Home & Garden"
-                                    class="block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
+                                    class="block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
                                 />
                                 <InputError :message="form.errors.name" class="mt-1.5" />
                             </div>
@@ -92,7 +92,7 @@ const submit = () => {
                                 <select
                                     id="parent_id"
                                     v-model="form.parent_id"
-                                    class="block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
+                                    class="block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
                                 >
                                     <option value="">None — Top Level Category</option>
                                     <option

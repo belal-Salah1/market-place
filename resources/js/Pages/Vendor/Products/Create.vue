@@ -4,9 +4,17 @@ import { ref, computed } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
+defineProps({
+    categories: {
+        type: Array as () => Array<{ id: number; name: string; parent_id: number | null }>,
+        default: () => [],
+    },
+});
+
 const form = useForm({
     name: '',
     description: '',
+    category_id: '',
     price: '',
     stock: '',
     image: null as File | null,
@@ -126,7 +134,7 @@ const submit = () => {
                                             type="text"
                                             v-model="form.name"
                                             placeholder="e.g. Wireless Headphones Pro"
-                                            class="block w-full rounded-xl border-gray-200 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
                                         />
                                         <InputError :message="form.errors.name" class="mt-1.5" />
                                     </div>
@@ -142,9 +150,31 @@ const submit = () => {
                                             v-model="form.description"
                                             rows="5"
                                             placeholder="Describe your product -- features, materials, dimensions..."
-                                            class="block w-full resize-none rounded-xl border-gray-200 bg-gray-50/80 px-4 py-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                            class="block w-full resize-none rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
                                         ></textarea>
                                         <InputError :message="form.errors.description" class="mt-1.5" />
+                                    </div>
+
+                                    <!-- Category -->
+                                    <div>
+                                        <label for="category_id" class="mb-1.5 block text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                                            Category <span class="text-red-400">*</span>
+                                        </label>
+                                        <select
+                                            id="category_id"
+                                            v-model="form.category_id"
+                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                        >
+                                            <option value="" disabled>Select a category</option>
+                                            <option
+                                                v-for="category in categories"
+                                                :key="category.id"
+                                                :value="category.id"
+                                            >
+                                                {{ category.parent_id ? '— ' : '' }}{{ category.name }}
+                                            </option>
+                                        </select>
+                                        <InputError :message="form.errors.category_id" class="mt-1.5" />
                                     </div>
                                 </div>
                             </div>
