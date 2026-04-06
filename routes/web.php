@@ -59,6 +59,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customer/dashboard', [CustomerController::class, 'index'])->middleware('role:customer')->name('customer.dashboard');
 });
 
+// Customer routes
+Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
+    Route::get('/customer/products', [CustomerController::class, 'products'])->name('customer.products.index');
+    Route::get('/customer/products/{product}', [CustomerController::class, 'productShow'])->name('customer.products.show');
+    Route::get('/customer/orders', [CustomerController::class, 'orders'])->name('customer.orders.index');
+    Route::get('/customer/orders/{order}', [CustomerController::class, 'orderShow'])->name('customer.orders.show');
+    Route::post('/customer/orders', [CustomerController::class, 'storeOrder'])->name('customer.orders.store');
+});
+
 // Vendor pending approval (not protected by vendor.approval to avoid loop)
 Route::middleware('auth')->get('/vendor/pending-approval', [VendorController::class, 'pendingApproval'])->name('vendor.pending-approval');
 

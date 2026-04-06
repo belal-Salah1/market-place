@@ -2,193 +2,246 @@
 import { Head, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
-const recentItems = [
-    { name: 'Wireless Headphones', price: '$99.00', status: 'Delivered', date: 'Oct 24, 2023' },
-    { name: 'Mechanical Keyboard', price: '$150.00', status: 'In Transit', date: 'Oct 26, 2023' },
-    { name: 'Gaming Mouse', price: '$59.00', status: 'Processing', date: 'Oct 27, 2023' },
-];
+interface OrderItem {
+    id: number;
+    quantity: number;
+    price: number;
+    product: { id: number; name: string };
+}
+
+interface Order {
+    id: number;
+    total_price: number;
+    status: string;
+    created_at: string;
+    items: OrderItem[];
+}
+
+defineProps<{
+    user: object;
+    recentOrders: Order[];
+    orderCount: number;
+}>();
+
+function formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+}
+
+function formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+}
+
+function statusBadgeClasses(status: string): string {
+    const base = 'rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase';
+    const map: Record<string, string> = {
+        pending: 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
+        processing: 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400',
+        shipped: 'bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400',
+        delivered: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
+        cancelled: 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400',
+    };
+    return `${base} ${map[status] ?? map.pending}`;
+}
 </script>
 
 <template>
-    <Head title="My Dashboard" />
+    <Head title="Customer Dashboard" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100" data-gsap="fade-up">Welcome back, {{ $page.props.auth.user.name }}!</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100" data-gsap="fade-up">Customer Dashboard</h2>
         </template>
 
         <div class="py-8">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                    <!-- Orders Section -->
-                    <div class="space-y-6 lg:col-span-2" data-gsap="fade-up" data-gsap-delay="0.3">
-                        <div
-                            class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
-                        >
-                            <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5 dark:border-[#2e3039]">
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-indigo-600"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                        >
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">My Recent Orders</h3>
-                                </div>
-                                <Link href="#" class="text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-800">
-                                    View History
-                                </Link>
+                <!-- Stats -->
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div
+                        class="glass-card rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
+                    >
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-indigo-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Orders</p>
+                        <p class="mt-0.5 text-xl font-bold text-indigo-600">{{ orderCount }}</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Link
+                        :href="route('customer.products.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
+                        data-gsap-delay="0.3"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-500/10">
+                                <svg class="h-5 w-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                                    />
+                                </svg>
                             </div>
-                            <div class="divide-y divide-gray-50 dark:divide-[#2e3039]">
-                                <div
-                                    v-for="(item, index) in recentItems"
-                                    :key="item.name"
-                                    class="glass-card flex items-center justify-between px-6 py-5 transition-all"
-                                    data-gsap="fade-up"
-                                    data-gsap-delay="0.15"
+                            <div>
+                                <p
+                                    class="font-semibold text-gray-900 transition-colors group-hover:text-emerald-600 dark:text-gray-100 dark:group-hover:text-emerald-400"
                                 >
-                                    <div class="flex items-center space-x-4">
-                                        <div
-                                            class="flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50 text-indigo-400 dark:bg-indigo-500/10"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-7 w-7"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                            >
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</p>
-                                            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ item.date }} &middot; {{ item.price }}</p>
-                                        </div>
-                                    </div>
-                                    <span
-                                        :class="[
-                                            'rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase',
-                                            item.status === 'Delivered'
-                                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                                                : item.status === 'In Transit'
-                                                  ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
-                                                  : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
-                                        ]"
-                                    >
-                                        {{ item.status }}
-                                    </span>
-                                </div>
+                                    Browse Products
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Discover and shop products</p>
                             </div>
                         </div>
+                        <svg
+                            class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-emerald-400 dark:text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                        >
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
+                    <Link
+                        :href="route('customer.orders.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
+                        data-gsap-delay="0.38"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-500/10">
+                                <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p
+                                    class="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600 dark:text-gray-100 dark:group-hover:text-indigo-400"
+                                >
+                                    My Orders
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">View your order history</p>
+                            </div>
+                        </div>
+                        <svg
+                            class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-indigo-400 dark:text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                        >
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
+                </div>
+
+                <!-- Recent Orders -->
+                <div
+                    class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                    data-gsap="fade-up"
+                    data-gsap-delay="0.45"
+                >
+                    <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5 dark:border-[#2e3039]">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-indigo-600"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                >
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Recent Orders</h3>
+                        </div>
+                        <Link
+                            :href="route('customer.orders.index')"
+                            class="text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        >
+                            View All
+                        </Link>
                     </div>
 
-                    <!-- Sidebar Info -->
-                    <div class="space-y-6" data-gsap="slide-right" data-gsap-delay="0.22">
-                        <!-- Rewards Card -->
-                        <div class="rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 text-white shadow-lg">
-                            <div class="mb-3 flex items-center space-x-3">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm">
+                    <!-- Orders List -->
+                    <div v-if="recentOrders.length > 0" class="divide-y divide-gray-50 dark:divide-[#2e3039]">
+                        <Link
+                            v-for="order in recentOrders"
+                            :key="order.id"
+                            :href="route('customer.orders.show', order.id)"
+                            class="glass-card flex items-center justify-between px-6 py-5 transition-all hover:bg-gray-50/50 dark:hover:bg-[#252830]/50"
+                            data-gsap="fade-up"
+                            data-gsap-delay="0.15"
+                        >
+                            <div class="flex items-center space-x-4">
+                                <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50 text-indigo-400 dark:bg-indigo-500/10">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-5 w-5"
+                                        class="h-7 w-7"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
-                                        stroke-width="2"
+                                        stroke-width="1.5"
                                     >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
-                                        />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-bold">Member Rewards</h3>
+                                <div>
+                                    <p class="font-semibold text-gray-900 dark:text-gray-100">Order #{{ order.id }}</p>
+                                    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                        {{ formatDate(order.created_at) }} &middot; {{ formatCurrency(order.total_price) }}
+                                    </p>
+                                    <p v-if="order.items.length > 0" class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                                        {{ order.items.map((i) => i.product.name).join(', ') }}
+                                    </p>
+                                </div>
                             </div>
-                            <p class="mb-1 text-3xl font-bold">450</p>
-                            <p class="mb-6 text-sm text-indigo-100">Points available for your next purchase</p>
-                            <button class="btn-sweep w-full rounded-xl bg-white py-3 font-bold text-indigo-600 transition-colors hover:bg-indigo-50">
-                                Redeem Now
-                            </button>
-                        </div>
+                            <span :class="statusBadgeClasses(order.status)">
+                                {{ order.status }}
+                            </span>
+                        </Link>
+                    </div>
 
-                        <!-- Account Settings -->
-                        <div
-                            class="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
-                        >
-                            <h3 class="mb-4 text-lg font-bold text-gray-800 dark:text-gray-100">Account Settings</h3>
-                            <nav class="space-y-1">
-                                <Link
-                                    href="/profile"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                        />
-                                    </svg>
-                                    <span class="text-sm font-medium">Profile Information</span>
-                                </Link>
-                                <Link
-                                    href="#"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                                        />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span class="text-sm font-medium">Shipping Addresses</span>
-                                </Link>
-                                <Link
-                                    href="#"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                                        />
-                                    </svg>
-                                    <span class="text-sm font-medium">Payment Methods</span>
-                                </Link>
-                            </nav>
+                    <!-- Empty State -->
+                    <div v-else class="px-6 py-16 text-center">
+                        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 dark:bg-[#252830]">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-8 w-8 text-gray-400 dark:text-gray-500"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
                         </div>
+                        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">No orders yet</p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Start shopping to see your orders here.</p>
+                        <Link
+                            :href="route('customer.products.index')"
+                            class="btn-sweep mt-6 inline-flex items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+                        >
+                            Browse Products
+                        </Link>
                     </div>
                 </div>
             </div>

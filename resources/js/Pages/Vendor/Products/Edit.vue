@@ -80,8 +80,10 @@ const onDrop = (e: DragEvent) => {
 };
 
 const submit = () => {
-    form.post(route('vendor.products.update', props.product.id), {
+    form.transform((data) => ({
+        ...data,
         _method: 'put',
+    })).post(route('vendor.products.update', props.product.id), {
         forceFormData: true,
     });
 };
