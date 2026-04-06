@@ -39,11 +39,11 @@ const closeModal = () => {
 </script>
 
 <template>
-    <section class="animate-fade-in space-y-6">
+    <section class="space-y-6" data-gsap="fade-in">
         <header>
             <div class="flex items-center gap-2.5">
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100">
-                    <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 dark:bg-red-500/20">
+                    <svg class="h-4 w-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -53,8 +53,8 @@ const closeModal = () => {
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-base font-bold text-gray-800">Delete Account</h2>
-                    <p class="mt-0.5 text-sm text-gray-500">
+                    <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Delete Account</h2>
+                    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
                         Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please
                         download any data or information that you wish to retain.
                     </p>
@@ -67,8 +67,8 @@ const closeModal = () => {
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6 sm:p-8">
                 <div class="flex items-start gap-4">
-                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-red-100">
-                        <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-red-100 dark:bg-red-500/20">
+                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -78,8 +78,8 @@ const closeModal = () => {
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-lg font-bold text-gray-800">Are you sure you want to delete your account?</h2>
-                        <p class="mt-2 text-sm leading-relaxed text-gray-500">
+                        <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Are you sure you want to delete your account?</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
                             Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to
                             confirm you would like to permanently delete your account.
                         </p>

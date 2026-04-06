@@ -1,124 +1,15 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================
-   Crystal Market — Animation System
+   Crystal Market — Style System
    ============================================ */
 
-/* Entrance animations */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+/* GSAP: hide targets until animated */
+[data-gsap] {
+    visibility: hidden;
 }
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-24px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-    from { opacity: 0; transform: translateX(24px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.92); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Decorative animations */
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    33% { transform: translateY(-12px) rotate(2deg); }
-    66% { transform: translateY(6px) rotate(-1deg); }
-}
-
-@keyframes floatSlow {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    50% { transform: translateY(-20px) translateX(10px); }
-}
-
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-@keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.2); }
-    50% { box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.15); }
-}
-
-/* Utility classes */
-.animate-fade-in-up {
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-fade-in-down {
-    animation: fadeInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.5s ease both;
-}
-
-.animate-slide-in-left {
-    animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-slide-in-right {
-    animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-scale-in {
-    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-float {
-    animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-slow {
-    animation: floatSlow 8s ease-in-out infinite;
-}
-
-.animate-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 2s ease-in-out infinite;
-}
-
-.animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientShift 4s ease infinite;
-}
-
-.animate-pulse-glow {
-    animation: pulseGlow 3s ease-in-out infinite;
-}
-
-/* Stagger delays */
-.delay-0 { animation-delay: 0ms; }
-.delay-1 { animation-delay: 75ms; }
-.delay-2 { animation-delay: 150ms; }
-.delay-3 { animation-delay: 225ms; }
-.delay-4 { animation-delay: 300ms; }
-.delay-5 { animation-delay: 375ms; }
-.delay-6 { animation-delay: 450ms; }
-.delay-7 { animation-delay: 525ms; }
 
 /* Glass card hover lift */
 .glass-card {
@@ -132,10 +23,22 @@
                 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 
+:is(.dark) .glass-card:hover {
+    box-shadow: 0 12px 40px -8px rgba(59, 130, 246, 0.12),
+                0 4px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
 /* Input focus glow */
 input:focus, textarea:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1),
                 0 0 16px -2px rgba(99, 102, 241, 0.08);
+}
+
+:is(.dark) input:focus,
+:is(.dark) textarea:focus,
+:is(.dark) select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15),
+                0 0 12px -2px rgba(59, 130, 246, 0.1);
 }
 
 /* Button hover sweep */
@@ -155,4 +58,9 @@ input:focus, textarea:focus, select:focus {
 
 .btn-sweep:hover::after {
     transform: translateX(100%);
+}
+
+/* Smooth theme transition */
+html {
+    transition: color 0.2s ease;
 }

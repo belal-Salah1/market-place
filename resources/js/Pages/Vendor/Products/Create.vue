@@ -80,7 +80,7 @@ const submit = () => {
                 <div class="flex items-center gap-3">
                     <Link
                         :href="route('vendor.dashboard')"
-                        class="group flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-600"
+                        class="group flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-white/5 dark:text-gray-500 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
                     >
                         <svg
                             class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5"
@@ -92,8 +92,8 @@ const submit = () => {
                         </svg>
                     </Link>
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Create Product</h2>
-                        <p class="text-xs text-gray-400">Fill in the details to list a new product</p>
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Create Product</h2>
+                        <p class="text-xs text-gray-400 dark:text-gray-500">Fill in the details to list a new product</p>
                     </div>
                 </div>
                 <span class="hidden items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-600 ring-1 ring-amber-200/50 sm:inline-flex">
@@ -110,9 +110,9 @@ const submit = () => {
                         <!-- Left Column: Form Fields (2/3) -->
                         <div class="space-y-6 lg:col-span-2">
                             <!-- Product Info Card -->
-                            <div class="glass-card animate-fade-in-up delay-0 rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
+                            <div class="glass-card rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:bg-[#1e2028]/90 dark:border-[#2e3039]" data-gsap="fade-up" data-gsap-delay="0">
                                 <div class="mb-5 flex items-center gap-2.5">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-500/10">
                                         <svg class="h-4 w-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 stroke-linecap="round"
@@ -122,19 +122,19 @@ const submit = () => {
                                             />
                                         </svg>
                                     </div>
-                                    <h3 class="text-sm font-bold text-gray-800">Product Information</h3>
+                                    <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100">Product Information</h3>
                                 </div>
 
                                 <div class="space-y-5">
                                     <!-- Name -->
                                     <div>
-                                        <label for="name" class="mb-1.5 block text-xs font-semibold tracking-wide text-gray-500 uppercase">Product Name</label>
+                                        <label for="name" class="mb-1.5 block text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-300">Product Name</label>
                                         <input
                                             id="name"
                                             type="text"
                                             v-model="form.name"
                                             placeholder="e.g. Wireless Headphones Pro"
-                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:placeholder-gray-600"
                                         />
                                         <InputError :message="form.errors.name" class="mt-1.5" />
                                     </div>
@@ -142,28 +142,28 @@ const submit = () => {
                                     <!-- Description -->
                                     <div>
                                         <div class="mb-1.5 flex items-center justify-between">
-                                            <label for="description" class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Description</label>
-                                            <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-400 tabular-nums">{{ charCount }} chars</span>
+                                            <label for="description" class="text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-300">Description</label>
+                                            <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-400 tabular-nums dark:bg-[#252830] dark:text-gray-500">{{ charCount }} chars</span>
                                         </div>
                                         <textarea
                                             id="description"
                                             v-model="form.description"
                                             rows="5"
                                             placeholder="Describe your product -- features, materials, dimensions..."
-                                            class="block w-full resize-none rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                            class="block w-full resize-none rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:placeholder-gray-600"
                                         ></textarea>
                                         <InputError :message="form.errors.description" class="mt-1.5" />
                                     </div>
 
                                     <!-- Category -->
                                     <div>
-                                        <label for="category_id" class="mb-1.5 block text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                                        <label for="category_id" class="mb-1.5 block text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-300">
                                             Category <span class="text-red-400">*</span>
                                         </label>
                                         <select
                                             id="category_id"
                                             v-model="form.category_id"
-                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                                            class="block w-full rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-3 text-sm text-gray-900 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:placeholder-gray-600"
                                         >
                                             <option value="" disabled>Select a category</option>
                                             <option
@@ -180,9 +180,9 @@ const submit = () => {
                             </div>
 
                             <!-- Pricing & Stock Card -->
-                            <div class="glass-card animate-fade-in-up delay-2 rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
+                            <div class="glass-card rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:bg-[#1e2028]/90 dark:border-[#2e3039]" data-gsap="fade-up" data-gsap-delay="0.15">
                                 <div class="mb-5 flex items-center gap-2.5">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/10">
                                         <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 stroke-linecap="round"
@@ -192,13 +192,13 @@ const submit = () => {
                                             />
                                         </svg>
                                     </div>
-                                    <h3 class="text-sm font-bold text-gray-800">Pricing & Inventory</h3>
+                                    <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100">Pricing & Inventory</h3>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- Price -->
-                                    <div class="rounded-xl border border-white/60 bg-gradient-to-br from-emerald-50/50 to-white p-5 shadow-sm">
-                                        <label for="price" class="mb-3 block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Price</label>
+                                    <div class="rounded-xl border border-white/60 bg-gradient-to-br from-emerald-50/50 to-white p-5 shadow-sm dark:border-[#2e3039] dark:from-emerald-500/5 dark:to-[#1e2028]">
+                                        <label for="price" class="mb-3 block text-[10px] font-bold tracking-widest text-gray-400 uppercase dark:text-gray-500">Price</label>
                                         <div class="flex items-baseline gap-1.5">
                                             <span class="text-lg font-bold text-emerald-400">$</span>
                                             <input
@@ -208,15 +208,15 @@ const submit = () => {
                                                 min="0"
                                                 v-model="form.price"
                                                 placeholder="0.00"
-                                                class="w-full border-0 bg-transparent p-0 text-2xl font-bold text-gray-900 tabular-nums placeholder-gray-300 focus:ring-0"
+                                                class="w-full border-0 bg-transparent p-0 text-2xl font-bold text-gray-900 tabular-nums placeholder-gray-300 focus:ring-0 dark:text-gray-100"
                                             />
                                         </div>
                                         <InputError :message="form.errors.price" class="mt-2" />
                                     </div>
 
                                     <!-- Stock -->
-                                    <div class="rounded-xl border border-white/60 bg-gradient-to-br from-violet-50/50 to-white p-5 shadow-sm">
-                                        <label for="stock" class="mb-3 block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Stock</label>
+                                    <div class="rounded-xl border border-white/60 bg-gradient-to-br from-violet-50/50 to-white p-5 shadow-sm dark:border-[#2e3039] dark:from-violet-500/5 dark:to-[#1e2028]">
+                                        <label for="stock" class="mb-3 block text-[10px] font-bold tracking-widest text-gray-400 uppercase dark:text-gray-500">Stock</label>
                                         <div class="flex items-baseline gap-1.5">
                                             <svg class="h-5 w-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path
@@ -232,7 +232,7 @@ const submit = () => {
                                                 min="0"
                                                 v-model="form.stock"
                                                 placeholder="0"
-                                                class="w-full border-0 bg-transparent p-0 text-2xl font-bold text-gray-900 tabular-nums placeholder-gray-300 focus:ring-0"
+                                                class="w-full border-0 bg-transparent p-0 text-2xl font-bold text-gray-900 tabular-nums placeholder-gray-300 focus:ring-0 dark:text-gray-100"
                                             />
                                         </div>
                                         <InputError :message="form.errors.stock" class="mt-2" />
@@ -244,9 +244,9 @@ const submit = () => {
                         <!-- Right Column: Image + Actions (1/3) -->
                         <div class="space-y-6">
                             <!-- Image Upload Card -->
-                            <div class="glass-card animate-fade-in-up delay-1 rounded-2xl border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+                            <div class="glass-card rounded-2xl border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:bg-[#1e2028]/90 dark:border-[#2e3039]" data-gsap="fade-up" data-gsap-delay="0.08">
                                 <div class="mb-4 flex items-center gap-2.5">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-500/10">
                                         <svg class="h-4 w-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 stroke-linecap="round"
@@ -256,7 +256,7 @@ const submit = () => {
                                             />
                                         </svg>
                                     </div>
-                                    <h3 class="text-sm font-bold text-gray-800">Product Image</h3>
+                                    <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100">Product Image</h3>
                                 </div>
 
                                 <!-- Preview State -->
@@ -300,7 +300,7 @@ const submit = () => {
                                     :class="
                                         isDragging
                                             ? 'border-indigo-400 bg-indigo-50 shadow-inner'
-                                            : 'border-gray-200 bg-gray-50/50 hover:border-indigo-300 hover:bg-indigo-50/30'
+                                            : 'border-gray-200 bg-gray-50/50 hover:border-indigo-300 hover:bg-indigo-50/30 dark:border-[#2e3039] dark:bg-[#1a1d23]/50 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/5'
                                     "
                                     @dragover="onDragOver"
                                     @dragleave="onDragLeave"
@@ -308,10 +308,10 @@ const submit = () => {
                                 >
                                     <!-- Background decoration -->
                                     <div
-                                        class="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-indigo-100/40 transition-transform duration-300 group-hover:scale-125"
+                                        class="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-indigo-100/40 transition-transform duration-300 group-hover:scale-125 dark:bg-indigo-500/10"
                                     />
                                     <div
-                                        class="absolute -bottom-3 -left-3 h-16 w-16 rounded-full bg-violet-100/40 transition-transform duration-300 group-hover:scale-125"
+                                        class="absolute -bottom-3 -left-3 h-16 w-16 rounded-full bg-violet-100/40 transition-transform duration-300 group-hover:scale-125 dark:bg-violet-500/10"
                                     />
 
                                     <div class="relative flex flex-col items-center">
@@ -332,8 +332,8 @@ const submit = () => {
                                                 />
                                             </svg>
                                         </div>
-                                        <p class="text-sm font-semibold text-gray-600"><span class="text-indigo-600">Upload</span> or drag & drop</p>
-                                        <p class="mt-1 text-[11px] text-gray-400">PNG, JPG, GIF &middot; Max 2MB</p>
+                                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400"><span class="text-indigo-600 dark:text-indigo-400">Upload</span> or drag & drop</p>
+                                        <p class="mt-1 text-[11px] text-gray-400 dark:text-gray-500">PNG, JPG, GIF &middot; Max 2MB</p>
                                     </div>
                                 </label>
 
@@ -348,7 +348,7 @@ const submit = () => {
                             </div>
 
                             <!-- Actions Card -->
-                            <div class="glass-card animate-fade-in-up delay-3 rounded-2xl border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+                            <div class="glass-card rounded-2xl border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:bg-[#1e2028]/90 dark:border-[#2e3039]" data-gsap="fade-up" data-gsap-delay="0.22">
                                 <button
                                     type="submit"
                                     :disabled="form.processing"
@@ -376,21 +376,21 @@ const submit = () => {
 
                                 <Link
                                     :href="route('vendor.dashboard')"
-                                    class="mt-3 flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-gray-50 hover:text-gray-800"
+                                    class="mt-3 flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-gray-50 hover:text-gray-800 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-300 dark:hover:bg-[#252830] dark:hover:text-gray-100"
                                 >
                                     Cancel
                                 </Link>
                             </div>
 
                             <!-- Tips Card -->
-                            <div class="animate-fade-in-up delay-5 rounded-xl border border-indigo-100/60 bg-indigo-50/50 px-5 py-4 backdrop-blur-sm">
+                            <div class="rounded-xl border border-indigo-100/60 bg-indigo-50/50 px-5 py-4 backdrop-blur-sm dark:bg-indigo-500/5 dark:border-indigo-500/10" data-gsap="fade-up" data-gsap-delay="0.38">
                                 <div class="flex items-center gap-2">
                                     <svg class="h-4 w-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <p class="text-xs font-semibold text-indigo-900/70">Quick tips</p>
+                                    <p class="text-xs font-semibold text-indigo-900/70 dark:text-indigo-300/70">Quick tips</p>
                                 </div>
-                                <ul class="mt-2.5 space-y-1.5 text-xs text-indigo-700/60">
+                                <ul class="mt-2.5 space-y-1.5 text-xs text-indigo-700/60 dark:text-indigo-300/50">
                                     <li class="flex items-start gap-2">
                                         <span class="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-indigo-400" />
                                         Use a clear, well-lit product photo

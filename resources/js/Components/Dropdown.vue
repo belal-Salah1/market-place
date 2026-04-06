@@ -12,7 +12,7 @@ const props = defineProps({
     },
     contentClasses: {
         type: String,
-        default: 'py-1 bg-white',
+        default: 'py-1 bg-white dark:bg-gray-800',
     },
 });
 
@@ -72,7 +72,7 @@ const open = ref(false);
                 @click="open = false"
             >
                 <div
-                    class="rounded-xl ring-1 ring-black/5"
+                    class="rounded-xl ring-1 ring-black/5 dark:ring-white/10"
                     :class="contentClasses"
                 >
                     <slot name="content" />

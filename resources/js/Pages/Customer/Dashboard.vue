@@ -14,40 +14,49 @@ const recentItems = [
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="animate-fade-in-up text-2xl font-bold text-gray-800">Welcome back, {{ $page.props.auth.user.name }}!</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100" data-gsap="fade-up">Welcome back, {{ $page.props.auth.user.name }}!</h2>
         </template>
 
         <div class="py-8">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     <!-- Orders Section -->
-                    <div class="space-y-6 lg:col-span-2 animate-fade-in-up delay-4">
-                        <div class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm shadow-sm">
-                            <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5">
+                    <div class="space-y-6 lg:col-span-2" data-gsap="fade-up" data-gsap-delay="0.3">
+                        <div
+                            class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        >
+                            <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5 dark:border-[#2e3039]">
                                 <div class="flex items-center space-x-3">
-                                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="h-5 w-5 text-indigo-600"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                        >
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                         </svg>
                                     </div>
-                                    <h3 class="text-lg font-bold text-gray-800">My Recent Orders</h3>
+                                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">My Recent Orders</h3>
                                 </div>
                                 <Link href="#" class="text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-800">
                                     View History
                                 </Link>
                             </div>
-                            <div class="divide-y divide-gray-50">
+                            <div class="divide-y divide-gray-50 dark:divide-[#2e3039]">
                                 <div
                                     v-for="(item, index) in recentItems"
                                     :key="item.name"
-                                    :class="[
-                                        'glass-card flex items-center justify-between px-6 py-5 transition-all',
-                                        'animate-fade-in-up',
-                                        index === 0 ? 'delay-0' : index === 1 ? 'delay-1' : 'delay-2',
-                                    ]"
+                                    class="glass-card flex items-center justify-between px-6 py-5 transition-all"
+                                    data-gsap="fade-up"
+                                    data-gsap-delay="0.15"
                                 >
                                     <div class="flex items-center space-x-4">
-                                        <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50 text-indigo-400">
+                                        <div
+                                            class="flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50 text-indigo-400 dark:bg-indigo-500/10"
+                                        >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 class="h-7 w-7"
@@ -60,18 +69,18 @@ const recentItems = [
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-gray-900">{{ item.name }}</p>
-                                            <p class="mt-0.5 text-sm text-gray-500">{{ item.date }} &middot; {{ item.price }}</p>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</p>
+                                            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ item.date }} &middot; {{ item.price }}</p>
                                         </div>
                                     </div>
                                     <span
                                         :class="[
                                             'rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase',
                                             item.status === 'Delivered'
-                                                ? 'bg-emerald-50 text-emerald-700'
+                                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
                                                 : item.status === 'In Transit'
-                                                  ? 'bg-blue-50 text-blue-700'
-                                                  : 'bg-amber-50 text-amber-700',
+                                                  ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                                                  : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
                                         ]"
                                     >
                                         {{ item.status }}
@@ -82,7 +91,7 @@ const recentItems = [
                     </div>
 
                     <!-- Sidebar Info -->
-                    <div class="space-y-6 animate-slide-in-right delay-3">
+                    <div class="space-y-6" data-gsap="slide-right" data-gsap-delay="0.22">
                         <!-- Rewards Card -->
                         <div class="rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 text-white shadow-lg">
                             <div class="mb-3 flex items-center space-x-3">
@@ -112,16 +121,18 @@ const recentItems = [
                         </div>
 
                         <!-- Account Settings -->
-                        <div class="rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm shadow-sm p-6">
-                            <h3 class="mb-4 text-lg font-bold text-gray-800">Account Settings</h3>
+                        <div
+                            class="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        >
+                            <h3 class="mb-4 text-lg font-bold text-gray-800 dark:text-gray-100">Account Settings</h3>
                             <nav class="space-y-1">
                                 <Link
                                     href="/profile"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400"
+                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -137,11 +148,11 @@ const recentItems = [
                                 </Link>
                                 <Link
                                     href="#"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400"
+                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -158,11 +169,11 @@ const recentItems = [
                                 </Link>
                                 <Link
                                     href="#"
-                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                                    class="flex items-center rounded-xl p-3 text-gray-600 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="mr-3 h-5 w-5 text-gray-400"
+                                        class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"

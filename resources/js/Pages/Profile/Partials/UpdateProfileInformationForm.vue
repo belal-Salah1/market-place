@@ -23,11 +23,11 @@ const form = useForm({
 </script>
 
 <template>
-    <section class="animate-fade-in">
+    <section data-gsap="fade-in">
         <header>
             <div class="flex items-center gap-2.5">
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
-                    <svg class="h-4 w-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-500/20">
+                    <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -37,8 +37,8 @@ const form = useForm({
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-base font-bold text-gray-800">Profile Information</h2>
-                    <p class="mt-0.5 text-sm text-gray-500">Update your account's profile information and email address.</p>
+                    <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Profile Information</h2>
+                    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Update your account's profile information and email address.</p>
                 </div>
             </div>
         </header>
@@ -57,19 +57,19 @@ const form = useForm({
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-gray-800">
+                <p class="mt-2 text-sm text-gray-800 dark:text-gray-200">
                     Your email address is unverified.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                     >
                         Click here to re-send the verification email.
                     </Link>
                 </p>
 
-                <div v-show="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600">
+                <div v-show="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                     A new verification link has been sent to your email address.
                 </div>
             </div>
@@ -83,7 +83,7 @@ const form = useForm({
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm font-medium text-emerald-600">Saved successfully.</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Saved successfully.</p>
                 </Transition>
             </div>
         </form>

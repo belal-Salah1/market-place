@@ -34,11 +34,11 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section class="animate-fade-in">
+    <section data-gsap="fade-in">
         <header>
             <div class="flex items-center gap-2.5">
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
-                    <svg class="h-4 w-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-500/20">
+                    <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -48,8 +48,8 @@ const updatePassword = () => {
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-base font-bold text-gray-800">Update Password</h2>
-                    <p class="mt-0.5 text-sm text-gray-500">Ensure your account is using a long, random password to stay secure.</p>
+                    <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Update Password</h2>
+                    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Ensure your account is using a long, random password to stay secure.</p>
                 </div>
             </div>
         </header>
@@ -102,7 +102,7 @@ const updatePassword = () => {
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm font-medium text-emerald-600">Password updated.</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Password updated.</p>
                 </Transition>
             </div>
         </form>

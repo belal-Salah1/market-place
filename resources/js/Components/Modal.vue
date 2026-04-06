@@ -116,15 +116,15 @@ const maxWidthClass = computed(() => {
                     />
                     <div
                         v-show="showSlot"
-                        class="mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
+                        class="mb-6 transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-xl transition-all sm:mx-auto sm:w-full"
                         :class="maxWidthClass"
                     >
                         <slot v-if="showSlot" :vendor="props.vendor" :close="close" :approve="approve">
                             <div class="p-6">
-                                <h3 class="text-lg font-bold">Vendor details</h3>
-                                <p class="text-sm text-gray-600 mt-2">Name: {{ props.vendor?.name }}</p>
-                                <p class="text-sm text-gray-600">Email: {{ props.vendor?.email }}</p>
-                                <p class="text-sm text-gray-600">ID: {{ props.vendor?.id }}</p>
+                                <h3 class="text-lg font-bold dark:text-white">Vendor details</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Name: {{ props.vendor?.name }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Email: {{ props.vendor?.email }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">ID: {{ props.vendor?.id }}</p>
                                 <div class="mt-4 flex gap-2">
                                     <button @click="approve" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Approve</button>
                                     <button @click="reject" class="inline-flex items-center rounded-md border bg-red-600 px-4 py-2 text-sm text-white font-semibold">reject</button>

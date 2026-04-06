@@ -23,8 +23,8 @@ defineProps({
 
         <div class="text-center">
             <!-- Icon (amber themed) -->
-            <div class="mx-auto mb-6 flex justify-center animate-scale-in">
-                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200">
+            <div class="mx-auto mb-6 flex justify-center" data-gsap="scale-in">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200 dark:shadow-amber-500/20">
                     <svg
                         class="h-8 w-8 text-white"
                         fill="none"
@@ -42,29 +42,29 @@ defineProps({
             </div>
 
             <!-- Title -->
-            <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+            <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" data-gsap="fade-up" data-gsap-delay="0.08">
                 Registration Pending
             </h1>
 
             <!-- Message -->
-            <div class="mb-6 space-y-2 animate-fade-in-up delay-2">
-                <p class="text-sm text-gray-600">
+            <div class="mb-6 space-y-2" data-gsap="fade-up" data-gsap-delay="0.15">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Thank you for registering as a vendor,
-                    <span class="font-semibold text-gray-900">{{ user.name }}</span>!
+                    <span class="font-semibold text-gray-900 dark:text-gray-100">{{ user.name }}</span>!
                 </p>
-                <p class="text-sm leading-relaxed text-gray-500">
+                <p class="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
                     Your account is currently pending approval from our admin team.
                     You'll receive an email notification once your account has been reviewed.
                 </p>
             </div>
 
             <!-- Info Box -->
-            <div class="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 text-left animate-fade-in-up delay-3">
+            <div class="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/60 dark:border-indigo-500/20 dark:bg-indigo-500/10 p-4 text-left" data-gsap="fade-up" data-gsap-delay="0.22">
                 <div class="flex gap-3">
                     <div class="shrink-0">
-                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-500/20">
                             <svg
-                                class="h-4 w-4 text-indigo-600"
+                                class="h-4 w-4 text-indigo-600 dark:text-indigo-400"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                             >
@@ -77,23 +77,23 @@ defineProps({
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-900">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
                             What happens next?
                         </h3>
-                        <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
-                            <li class="flex items-start gap-2 animate-fade-in-up delay-4">
+                        <ul class="mt-2 space-y-1.5 text-sm text-gray-600 dark:text-gray-400">
+                            <li class="flex items-start gap-2" data-gsap="fade-up" data-gsap-delay="0.3">
                                 <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
                                 Our team will review your vendor registration
                             </li>
-                            <li class="flex items-start gap-2 animate-fade-in-up delay-5">
+                            <li class="flex items-start gap-2" data-gsap="fade-up" data-gsap-delay="0.38">
                                 <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
                                 This typically takes 1-2 business days
                             </li>
-                            <li class="flex items-start gap-2 animate-fade-in-up delay-6">
+                            <li class="flex items-start gap-2" data-gsap="fade-up" data-gsap-delay="0.45">
                                 <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
-                                You'll receive an email at <span class="font-semibold text-gray-900">{{ user.email }}</span>
+                                You'll receive an email at <span class="font-semibold text-gray-900 dark:text-gray-100">{{ user.email }}</span>
                             </li>
-                            <li class="flex items-start gap-2 animate-fade-in-up delay-7">
+                            <li class="flex items-start gap-2" data-gsap="fade-up" data-gsap-delay="0.52">
                                 <span class="mt-1 block h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
                                 Once approved, you can log in and start selling
                             </li>
@@ -103,7 +103,7 @@ defineProps({
             </div>
 
             <!-- Actions -->
-            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center animate-fade-in-up delay-7">
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center" data-gsap="fade-up" data-gsap-delay="0.52">
                 <Link :href="route('home')">
                     <PrimaryButton type="button" class="btn-sweep w-full justify-center sm:w-auto">
                         Back to Home
@@ -119,12 +119,12 @@ defineProps({
             </div>
 
             <!-- Support Contact -->
-            <div class="mt-6 border-t border-gray-100 pt-6 animate-fade-in delay-7">
-                <p class="text-xs text-gray-500">
+            <div class="mt-6 border-t border-gray-100 dark:border-[#2e3039] pt-6" data-gsap="fade-in" data-gsap-delay="0.52">
+                <p class="text-xs text-gray-500 dark:text-gray-400">
                     Have questions?
                     <a
                         href="mailto:support@example.com"
-                        class="font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
+                        class="font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                     >
                         Contact our support team
                     </a>

@@ -36,8 +36,8 @@ const submit = () => {
         <Head title="Reset Password" />
 
         <!-- Icon -->
-        <div class="mb-6 flex justify-center animate-scale-in">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+        <div class="mb-6 flex justify-center" data-gsap="scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200 dark:shadow-indigo-500/20">
                 <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
@@ -48,17 +48,17 @@ const submit = () => {
 
         <!-- Header -->
         <div class="mb-8 text-center">
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" data-gsap="fade-up" data-gsap-delay="0.08">
                 Choose a new password
             </h1>
-            <p class="mt-2 text-sm text-gray-500 animate-fade-in-up delay-2">
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400" data-gsap="fade-up" data-gsap-delay="0.15">
                 Enter your new password below to regain access to your account.
             </p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
             <!-- Email -->
-            <div class="animate-fade-in-up delay-3">
+            <div data-gsap="fade-up" data-gsap-delay="0.22">
                 <InputLabel for="email" value="Email address" />
                 <TextInput
                     id="email"
@@ -73,7 +73,7 @@ const submit = () => {
             </div>
 
             <!-- Password -->
-            <div class="animate-fade-in-up delay-4">
+            <div data-gsap="fade-up" data-gsap-delay="0.3">
                 <InputLabel for="password" value="New password" />
                 <TextInput
                     id="password"
@@ -88,7 +88,7 @@ const submit = () => {
             </div>
 
             <!-- Confirm Password -->
-            <div class="animate-fade-in-up delay-5">
+            <div data-gsap="fade-up" data-gsap-delay="0.38">
                 <InputLabel for="password_confirmation" value="Confirm new password" />
                 <TextInput
                     id="password_confirmation"
@@ -103,7 +103,7 @@ const submit = () => {
             </div>
 
             <!-- Submit -->
-            <div class="animate-fade-in-up delay-6">
+            <div data-gsap="fade-up" data-gsap-delay="0.45">
                 <PrimaryButton
                     class="btn-sweep w-full justify-center py-2.5"
                     :class="{ 'opacity-25': form.processing }"

@@ -26,8 +26,8 @@ const submit = () => {
         <Head title="Register" />
 
         <!-- Icon -->
-        <div class="mb-6 flex justify-center animate-scale-in">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+        <div class="mb-6 flex justify-center" data-gsap="scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200 dark:shadow-indigo-500/20">
                 <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
@@ -38,17 +38,17 @@ const submit = () => {
 
         <!-- Header -->
         <div class="mb-8 text-center">
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" data-gsap="fade-up" data-gsap-delay="0.08">
                 Create your account
             </h1>
-            <p class="mt-2 text-sm text-gray-500 animate-fade-in-up delay-2">
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400" data-gsap="fade-up" data-gsap-delay="0.15">
                 Join our marketplace and get started today
             </p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
             <!-- Name -->
-            <div class="animate-fade-in-up delay-3">
+            <div data-gsap="fade-up" data-gsap-delay="0.22">
                 <InputLabel for="name" value="Full name" />
                 <TextInput
                     id="name"
@@ -64,7 +64,7 @@ const submit = () => {
             </div>
 
             <!-- Email -->
-            <div class="animate-fade-in-up delay-4">
+            <div data-gsap="fade-up" data-gsap-delay="0.3">
                 <InputLabel for="email" value="Email address" />
                 <TextInput
                     id="email"
@@ -79,7 +79,7 @@ const submit = () => {
             </div>
 
             <!-- Password -->
-            <div class="animate-fade-in-up delay-5">
+            <div data-gsap="fade-up" data-gsap-delay="0.38">
                 <InputLabel for="password" value="Password" />
                 <TextInput
                     id="password"
@@ -94,7 +94,7 @@ const submit = () => {
             </div>
 
             <!-- Confirm Password -->
-            <div class="animate-fade-in-up delay-6">
+            <div data-gsap="fade-up" data-gsap-delay="0.45">
                 <InputLabel for="password_confirmation" value="Confirm password" />
                 <TextInput
                     id="password_confirmation"
@@ -110,17 +110,17 @@ const submit = () => {
 
             <!-- Vendor toggle card -->
             <div
-                class="animate-fade-in-up delay-7 cursor-pointer rounded-xl border-2 p-4 transition-all duration-200"
+                class="cursor-pointer rounded-xl border-2 p-4 transition-all duration-200" data-gsap="fade-up" data-gsap-delay="0.52"
                 :class="form.isVendor
-                    ? 'border-indigo-500 bg-indigo-50/60 ring-2 ring-indigo-500/20'
-                    : 'border-gray-200 bg-gray-50 hover:border-gray-300'"
+                    ? 'border-indigo-500 bg-indigo-50/60 ring-2 ring-indigo-500/20 dark:bg-indigo-500/10 dark:border-indigo-500/40'
+                    : 'border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-[#2e3039] dark:bg-[#1e2028]/60 dark:hover:border-gray-600'"
                 @click="form.isVendor = !form.isVendor"
             >
                 <div class="flex items-center gap-3">
                     <!-- Shop Icon -->
                     <div
                         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors duration-200"
-                        :class="form.isVendor ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'"
+                        :class="form.isVendor ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'"
                     >
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,10 +131,10 @@ const submit = () => {
 
                     <!-- Text -->
                     <div class="flex-1">
-                        <p class="text-sm font-semibold text-gray-900">
+                        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
                             I want to sell products
                         </p>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
                             Register as a vendor to list and sell your products
                         </p>
                     </div>
@@ -142,7 +142,7 @@ const submit = () => {
                     <!-- Toggle indicator -->
                     <div
                         class="relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200"
-                        :class="form.isVendor ? 'bg-indigo-600' : 'bg-gray-300'"
+                        :class="form.isVendor ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'"
                     >
                         <div
                             class="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"
@@ -153,7 +153,7 @@ const submit = () => {
             </div>
 
             <!-- Submit -->
-            <div class="animate-fade-in-up delay-7">
+            <div data-gsap="fade-up" data-gsap-delay="0.52">
                 <PrimaryButton
                     class="btn-sweep w-full justify-center py-2.5"
                     :class="{ 'opacity-25': form.processing }"
@@ -165,12 +165,12 @@ const submit = () => {
         </form>
 
         <!-- Login link -->
-        <div class="mt-8 border-t border-gray-100 pt-6 text-center animate-fade-in delay-7">
-            <p class="text-sm text-gray-500">
+        <div class="mt-8 border-t border-gray-100 dark:border-[#2e3039] pt-6 text-center" data-gsap="fade-in" data-gsap-delay="0.52">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
                 Already have an account?
                 <Link
                     :href="route('login')"
-                    class="font-semibold text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
+                    class="font-semibold text-indigo-600 transition-colors duration-200 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                     Sign in
                 </Link>

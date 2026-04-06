@@ -81,7 +81,9 @@ const stats = [
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="animate-fade-in-up bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-2xl font-bold text-transparent">Admin Control Center</h2>
+            <h2 class="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-2xl font-bold text-transparent" data-gsap="fade-up">
+                Admin Control Center
+            </h2>
         </template>
 
         <div class="py-8">
@@ -91,53 +93,80 @@ const stats = [
                     <div
                         v-for="(stat, index) in stats"
                         :key="stat.name"
-                        :class="[
-                            'glass-card rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm shadow-sm p-4',
-                            'animate-fade-in-up',
-                            index === 0 ? 'delay-0' : index === 1 ? 'delay-1' : index === 2 ? 'delay-2' : 'delay-3',
-                        ]"
+                        class="glass-card rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        data-gsap="fade-up"
                     >
                         <div class="mb-3 flex items-center justify-between">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-indigo-600"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                >
                                     <path stroke-linecap="round" stroke-linejoin="round" :d="stat.icon" />
                                 </svg>
                             </div>
-                            <span class="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">{{ stat.change }}</span>
+                            <span
+                                class="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                >{{ stat.change }}</span
+                            >
                         </div>
-                        <p class="text-xs font-medium text-gray-500">{{ stat.name }}</p>
-                        <p class="mt-0.5 text-xl font-bold text-gray-900">{{ stat.value }}</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ stat.name }}</p>
+                        <p class="mt-0.5 text-xl font-bold text-gray-900 dark:text-gray-100">{{ stat.value }}</p>
                     </div>
                 </div>
 
                 <!-- View All Vendors Link -->
-                <div class="mb-8 animate-fade-in-up delay-4">
+                <div class="mb-8" data-gsap="fade-up" data-gsap-delay="0.3">
                     <Link
                         :href="route('admin.vendors.index')"
-                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md dark:border-[#2e3039] dark:bg-[#1e2028]/90"
                     >
                         <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 shadow-lg shadow-indigo-200/50">
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 shadow-lg shadow-indigo-200/50"
+                            >
                                 <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                                    />
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">View All Vendors</p>
-                                <p class="text-xs text-gray-500">See every vendor with their products and categories</p>
+                                <p
+                                    class="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600 dark:text-gray-100 dark:group-hover:text-indigo-400"
+                                >
+                                    View All Vendors
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">See every vendor with their products and categories</p>
                             </div>
                         </div>
-                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <svg
+                            class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-indigo-400 dark:text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                        >
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
                     </Link>
                 </div>
 
                 <!-- Vendor Approval List -->
-                <div class="animate-fade-in-up delay-4 overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm shadow-sm">
-                    <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5">
+                <div
+                    class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                    data-gsap="fade-up"
+                    data-gsap-delay="0.3"
+                >
+                    <div class="flex items-center justify-between border-b border-gray-100/80 px-6 py-5 dark:border-[#2e3039]">
                         <div class="flex items-center space-x-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-5 w-5 text-indigo-600"
@@ -153,18 +182,20 @@ const stats = [
                                     />
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">Vendor Requests</h3>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Vendor Requests</h3>
                         </div>
-                        <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+                        <span
+                            class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
+                        >
                             {{ props.pendingVendors.length }} pending
                         </span>
                     </div>
 
                     <div v-if="props.pendingVendors.length === 0" class="px-6 py-12 text-center">
-                        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50">
+                        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 dark:bg-[#1a1d23]">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="h-7 w-7 text-gray-300"
+                                class="h-7 w-7 text-gray-300 dark:text-gray-500"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -173,10 +204,10 @@ const stats = [
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <p class="text-sm font-medium text-gray-400">No pending vendor requests</p>
+                        <p class="text-sm font-medium text-gray-400 dark:text-gray-500">No pending vendor requests</p>
                     </div>
 
-                    <div v-else class="divide-y divide-gray-50">
+                    <div v-else class="divide-y divide-gray-50 dark:divide-[#2e3039]">
                         <div
                             v-for="vendor in props.pendingVendors"
                             :key="vendor.id"
@@ -190,8 +221,8 @@ const stats = [
                                     <span class="text-sm font-bold">{{ vendor.name.substring(0, 2).toUpperCase() }}</span>
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-gray-900">{{ vendor.name }}</p>
-                                    <p class="mt-0.5 text-xs text-gray-500">
+                                    <p class="font-semibold text-gray-900 dark:text-gray-100">{{ vendor.name }}</p>
+                                    <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                                         {{ format.format(vendor.updated_at, { dateStyle: 'short', timeStyle: 'short' }) }} &middot; ID: #{{
                                             vendor.id
                                         }}
@@ -202,14 +233,16 @@ const stats = [
                                 <span
                                     :class="[
                                         'rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase',
-                                        isApproved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700',
+                                        isApproved
+                                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
+                                            : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
                                     ]"
                                 >
                                     {{ isApproved ? 'Approved' : 'Pending' }}
                                 </span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 text-gray-300"
+                                    class="h-5 w-5 text-gray-300 dark:text-gray-500"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"

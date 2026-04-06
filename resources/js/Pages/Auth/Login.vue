@@ -34,8 +34,8 @@ const submit = () => {
         <Head title="Log in" />
 
         <!-- Icon -->
-        <div class="mb-6 flex justify-center animate-scale-in">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200">
+        <div class="mb-6 flex justify-center" data-gsap="scale-in">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200 dark:shadow-indigo-500/20">
                 <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
@@ -46,10 +46,10 @@ const submit = () => {
 
         <!-- Header -->
         <div class="mb-8 text-center">
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 animate-fade-in-up delay-1">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" data-gsap="fade-up" data-gsap-delay="0.08">
                 Welcome back
             </h1>
-            <p class="mt-2 text-sm text-gray-500 animate-fade-in-up delay-2">
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400" data-gsap="fade-up" data-gsap-delay="0.15">
                 Sign in to your account to continue
             </p>
         </div>
@@ -57,14 +57,14 @@ const submit = () => {
         <!-- Status message -->
         <div
             v-if="status"
-            class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-center text-sm font-medium text-green-700 animate-fade-in"
+            class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-center text-sm font-medium text-green-700 dark:text-green-400 dark:bg-green-500/10 dark:border-green-500/20" data-gsap="fade-in"
         >
             {{ status }}
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
             <!-- Email -->
-            <div class="animate-fade-in-up delay-3">
+            <div data-gsap="fade-up" data-gsap-delay="0.22">
                 <InputLabel for="email" value="Email address" />
                 <TextInput
                     id="email"
@@ -80,7 +80,7 @@ const submit = () => {
             </div>
 
             <!-- Password -->
-            <div class="animate-fade-in-up delay-4">
+            <div data-gsap="fade-up" data-gsap-delay="0.3">
                 <InputLabel for="password" value="Password" />
                 <TextInput
                     id="password"
@@ -95,23 +95,23 @@ const submit = () => {
             </div>
 
             <!-- Remember me & Forgot password -->
-            <div class="flex items-center justify-between animate-fade-in-up delay-5">
+            <div class="flex items-center justify-between" data-gsap="fade-up" data-gsap-delay="0.38">
                 <label class="flex items-center gap-2">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="text-sm text-gray-600">Remember me</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
                 </label>
 
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="text-sm font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
+                    class="text-sm font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                     Forgot password?
                 </Link>
             </div>
 
             <!-- Submit -->
-            <div class="animate-fade-in-up delay-6">
+            <div data-gsap="fade-up" data-gsap-delay="0.45">
                 <PrimaryButton
                     class="btn-sweep w-full justify-center py-2.5"
                     :class="{ 'opacity-25': form.processing }"
@@ -123,12 +123,12 @@ const submit = () => {
         </form>
 
         <!-- Register link -->
-        <div class="mt-8 border-t border-gray-100 pt-6 text-center animate-fade-in-up delay-7">
-            <p class="text-sm text-gray-500">
+        <div class="mt-8 border-t border-gray-100 dark:border-[#2e3039] pt-6 text-center" data-gsap="fade-up" data-gsap-delay="0.52">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
                 Don't have an account?
                 <Link
                     :href="route('register')"
-                    class="font-semibold text-indigo-600 transition-colors duration-200 hover:text-indigo-800"
+                    class="font-semibold text-indigo-600 transition-colors duration-200 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                     Create one now
                 </Link>
