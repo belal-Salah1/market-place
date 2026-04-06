@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Inertia } from '@inertiajs/inertia';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { onMounted, computed, ref } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -108,6 +108,29 @@ const stats = [
                         <p class="text-xs font-medium text-gray-500">{{ stat.name }}</p>
                         <p class="mt-0.5 text-xl font-bold text-gray-900">{{ stat.value }}</p>
                     </div>
+                </div>
+
+                <!-- View All Vendors Link -->
+                <div class="mb-8 animate-fade-in-up delay-4">
+                    <Link
+                        :href="route('admin.vendors.index')"
+                        class="glass-card group flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 shadow-lg shadow-indigo-200/50">
+                                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">View All Vendors</p>
+                                <p class="text-xs text-gray-500">See every vendor with their products and categories</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 <!-- Vendor Approval List -->

@@ -14,7 +14,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::with('parent', 'children')
+            ->withCount('products')
+            ->latest()
+            ->get();
+
+        return Inertia::render('Vendor/Categories/Index', [
+            'categories' => $categories,
+        ]);
     }
 
     /**

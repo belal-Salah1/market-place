@@ -13,7 +13,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+    public function index(Request $request)
+    {
+        $products = Product::where('vendor_id', $request->user()->id)
+            ->with('category')
+            ->latest()
+            ->get();
+
+        return Inertia::render('Vendor/Products/Index', [
+            'products' => $products,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

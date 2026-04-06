@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -43,6 +42,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/admin/vendors/{user}/approve', [AdminController::class, 'approve'])
         ->middleware('role:admin')
         ->name('admin.vendors.approve');
+
+    // Admin: view all vendors and vendor details
+    Route::get('/admin/vendors', [AdminController::class, 'vendors'])
+        ->middleware('role:admin')
+        ->name('admin.vendors.index');
+
+    Route::get('/admin/vendors/{user}', [AdminController::class, 'vendorShow'])
+        ->middleware('role:admin')
+        ->name('admin.vendors.show');
 
     // Vendor dashboard
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->middleware('role:vendor')->name('vendor.dashboard');
@@ -109,8 +117,10 @@ Route::get('/reports/products/revenue', [ProductsReportController::class, 'reven
 // Route for vendor products
 
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
+    Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.products.index');
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('vendor.products.create');
     Route::post('/vendor/products', [ProductController::class, 'store'])->name('vendor.products.store');
+    Route::get('/vendor/categories', [CategoryController::class, 'index'])->name('vendor.categories.index');
     Route::get('/vendor/categories/create', [CategoryController::class, 'create'])->name('vendor.categories.create');
     Route::post('/vendor/categories/', [CategoryController::class, 'store'])->name('vendor.categories.store');
 });
