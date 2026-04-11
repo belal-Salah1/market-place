@@ -7,6 +7,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\EarningsController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
@@ -29,6 +30,12 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('home');
+
+Route::middleware('guest')->group(function(){
+    Route::get('/auth/google/redirect',[GoogleAuthController::class,'redirectToGoogle'])->name('auth.google.redirect');
+    Route::get('/auth/google/callback',[GoogleAuthController::class,'handleGoogleCallback'])->name('auth.google.callback');
+});
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard - redirects via middleware based on role
