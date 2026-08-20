@@ -14,29 +14,23 @@ interface Product {
     vendor: { id: number; name: string } | null;
 }
 
-interface PaymentMethod {
-    value: string;
-    label: string;
-}
-
 const props = defineProps<{
     product: Product;
-    paymentMethods: PaymentMethod[];
 }>();
 
 const form = useForm({
-    items: [{ product_id: props.product.id, quantity: 1 }],
-    payment_method: 'cash',
+    product_id: props.product.id,
+    quantity: 1,
 });
 
-const total = computed(() => props.product.price * form.items[0].quantity);
+const total = computed(() => props.product.price * form.quantity);
 
 function formatPrice(price: number): string {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 }
 
 function submit() {
-    form.post(route('customer.orders.store'));
+    form.post(route('customer.cart.store'), { preserveScroll: true });
 }
 </script>
 
@@ -68,17 +62,20 @@ function submit() {
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3" data-gsap="fade-up">
                     <!-- Product Details (Left) -->
                     <div class="lg:col-span-2">
-                        <div class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90">
+                        <div
+                            class="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        >
                             <!-- Image -->
                             <div class="relative overflow-hidden bg-gray-100 dark:bg-[#1a1d23]">
-                                <img
-                                    v-if="product.image"
-                                    :src="product.image"
-                                    :alt="product.name"
-                                    class="h-72 w-full object-cover sm:h-96"
-                                />
+                                <img v-if="product.image" :src="product.image" :alt="product.name" class="h-72 w-full object-cover sm:h-96" />
                                 <div v-else class="flex h-72 items-center justify-center sm:h-96">
-                                    <svg class="h-16 w-16 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                                    <svg
+                                        class="h-16 w-16 text-gray-300 dark:text-gray-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1"
+                                    >
                                         <path
                                             stroke-linecap="round"
                                             stroke-linejoin="round"
@@ -121,7 +118,13 @@ function submit() {
                                         :href="route('messages.show', product.vendor.id)"
                                         class="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
                                     >
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                                            />
+                                        </svg>
                                         Message Vendor
                                     </Link>
                                 </div>
@@ -129,7 +132,7 @@ function submit() {
                                 <p class="mb-6 text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(product.price) }}</p>
 
                                 <div class="border-t border-gray-100 pt-6 dark:border-[#2e3039]">
-                                    <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Description</h3>
+                                    <h3 class="mb-2 text-sm font-semibold tracking-wider text-gray-400 uppercase dark:text-gray-500">Description</h3>
                                     <p class="leading-relaxed text-gray-600 dark:text-gray-400">{{ product.description }}</p>
                                 </div>
                             </div>
@@ -138,52 +141,51 @@ function submit() {
 
                     <!-- Order Form (Right) -->
                     <div data-gsap="fade-up" data-gsap-delay="0.15">
-                        <div class="sticky top-8 rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90">
+                        <div
+                            class="sticky top-8 rounded-2xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
+                        >
                             <div class="mb-6 flex items-center gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-500/10">
-                                    <svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+                                    <svg
+                                        class="h-5 w-5 text-indigo-600 dark:text-indigo-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"
+                                        />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Place Order</h3>
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Add to Cart</h3>
                             </div>
 
-                            <form @submit.prevent="submit" class="space-y-5">
+                            <form class="space-y-5" @submit.prevent="submit">
                                 <!-- Quantity -->
                                 <div>
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
                                     <input
-                                        v-model.number="form.items[0].quantity"
+                                        v-model.number="form.quantity"
                                         type="number"
                                         min="1"
                                         :max="product.stock"
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20"
+                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 focus:outline-none dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20"
                                     />
-                                    <p v-if="form.errors.items" class="mt-1 text-xs text-red-500">{{ form.errors.items }}</p>
+                                    <p v-if="form.errors.quantity" class="mt-1 text-xs text-red-500">{{ form.errors.quantity }}</p>
+                                    <p v-if="form.errors.product_id" class="mt-1 text-xs text-red-500">{{ form.errors.product_id }}</p>
                                 </div>
 
-                                <!-- Payment Method -->
-                                <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
-                                    <select
-                                        v-model="form.payment_method"
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20 dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20"
-                                    >
-                                        <option v-for="method in paymentMethods" :key="method.value" :value="method.value">
-                                            {{ method.label }}
-                                        </option>
-                                    </select>
-                                    <p v-if="form.errors.payment_method" class="mt-1 text-xs text-red-500">{{ form.errors.payment_method }}</p>
-                                </div>
-
-                                <!-- Total -->
+                                <!-- Subtotal -->
                                 <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-[#2e3039] dark:bg-[#1a1d23]">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500 dark:text-gray-400">Total</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Subtotal</span>
                                         <span class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ formatPrice(total) }}</span>
                                     </div>
                                     <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                                        {{ form.items[0].quantity }} x {{ formatPrice(product.price) }}
+                                        {{ form.quantity }} x {{ formatPrice(product.price) }}
                                     </p>
                                 </div>
 
@@ -191,12 +193,19 @@ function submit() {
                                 <button
                                     type="submit"
                                     :disabled="form.processing || product.stock === 0"
-                                    class="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-[#1e2028]"
+                                    class="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-[#1e2028]"
                                 >
-                                    <span v-if="form.processing">Placing Order...</span>
+                                    <span v-if="form.processing">Adding...</span>
                                     <span v-else-if="product.stock === 0">Out of Stock</span>
-                                    <span v-else>Place Order</span>
+                                    <span v-else>Add to Cart</span>
                                 </button>
+
+                                <Link
+                                    :href="route('customer.cart.index')"
+                                    class="block text-center text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-800 dark:text-indigo-400"
+                                >
+                                    View cart
+                                </Link>
                             </form>
                         </div>
                     </div>

@@ -19,7 +19,9 @@ php artisan test --compact                        # Run all tests
 php artisan test --compact --filter=testName       # Run specific test
 php artisan test --compact tests/Unit/OrderReportTest.php  # Run specific file
 ```
-Tests use Pest 4 with PHPUnit 12. Test DB: MySQL database `market`. Unit tests are in `tests/Unit/`, feature tests in `tests/Feature/`.
+Tests use Pest 4 with PHPUnit 12. Test DB: in-memory SQLite (set in `phpunit.xml`) so `RefreshDatabase` can never wipe the development `market` database. Unit tests are in `tests/Unit/`, feature tests in `tests/Feature/`.
+
+Because SQLite and MySQL do not guarantee the same row order, assert unordered query results with `toEqualCanonicalizing`, not `toBe`.
 
 ### Linting & Formatting
 ```bash
@@ -52,3 +54,15 @@ MySQL with models: User, Role, Category (hierarchical via parent_id), Product, O
 - Prefer Eloquent over `DB::` facade; use eager loading to prevent N+1.
 - Run `vendor/bin/pint --dirty --format agent` before finalizing PHP changes.
 - Every change should be covered by tests (Pest).
+
+## Current Focus: Meta Tracking
+
+Active work is a full Meta (Facebook/Instagram) tracking system: Pixel (browser) + Conversions API (server) with `event_id` deduplication, UTM/fbclid attribution, queued + retried CAPI jobs backed by a `meta_events` table, and an admin tracking dashboard.
+
+**Read `docs/meta-tracking.md` before touching anything tracking-related.** Non-negotiables from it:
+- Fire CAPI `Purchase` from the backend after payment confirmation (webhook), never on the "Pay" click.
+- Every dual-sent event carries a deterministic `event_id` (e.g. `order_9843`) on both Pixel and CAPI.
+- CAPI calls go through a queued job with retries; a Meta outage must never fail an order.
+- Hash PII (email, phone) with SHA-256 after normalizing; never send raw.
+- Prefer Meta standard events over custom ones, and always send `value`/`currency`/`content_ids`.
+- Verify in Events Manager (Test Events, Event Match Quality, deduplication) — passing tests alone is not "done".

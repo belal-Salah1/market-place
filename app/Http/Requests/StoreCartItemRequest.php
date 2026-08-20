@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\PaymentMethodStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreOrderRequest extends FormRequest
+class StoreCartItemRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,14 +12,13 @@ class StoreOrderRequest extends FormRequest
     }
 
     /**
-     * Line items come from the customer's cart, not the request body.
-     *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'payment_method' => ['required', Rule::enum(PaymentMethodStatus::class)],
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
         ];
     }
 }

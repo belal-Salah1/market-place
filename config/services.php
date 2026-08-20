@@ -35,6 +35,14 @@ return [
         ],
     ],
 
+    'meta' => [
+        'pixel_id' => env('META_PIXEL_ID'),
+        'capi_token' => env('META_CAPI_ACCESS_TOKEN'),
+        'test_event_code' => env('META_CAPI_TEST_EVENT_CODE'),
+        'api_version' => env('META_CAPI_VERSION', 'v21.0'),
+        'currency' => env('META_CURRENCY', 'USD'),
+    ],
+
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),

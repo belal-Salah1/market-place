@@ -2,8 +2,10 @@
 
 use App\Enums\RoleStatus;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryReportController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomersReportController;
@@ -93,6 +95,13 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::get('/customer/orders', [CustomerController::class, 'orders'])->name('customer.orders.index');
     Route::get('/customer/orders/{order}', [CustomerController::class, 'orderShow'])->name('customer.orders.show');
     Route::post('/customer/orders', [CustomerController::class, 'storeOrder'])->name('customer.orders.store');
+
+    // Cart & checkout
+    Route::get('/customer/cart', [CartController::class, 'index'])->name('customer.cart.index');
+    Route::post('/customer/cart', [CartController::class, 'store'])->name('customer.cart.store');
+    Route::patch('/customer/cart/{cartItem}', [CartController::class, 'update'])->name('customer.cart.update');
+    Route::delete('/customer/cart/{cartItem}', [CartController::class, 'destroy'])->name('customer.cart.destroy');
+    Route::get('/customer/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
 });
 
 // Vendor pending approval (not protected by vendor.approval to avoid loop)

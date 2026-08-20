@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
-use App\Enums\PaymentMethodStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -64,10 +64,6 @@ class CustomerController extends Controller
 
         return Inertia::render('Customer/Products/Show', [
             'product' => $product,
-            'paymentMethods' => array_map(
-                fn ($m) => ['value' => $m->value, 'label' => ucwords(str_replace('_', ' ', $m->value))],
-                PaymentMethodStatus::cases()
-            ),
         ]);
     }
 
@@ -94,33 +90,39 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function storeOrder(StoreOrderRequest $request)
+    public function storeOrder(StoreOrderRequest $request, CartService $cartService)
     {
-        $validated = $request->validated();
+        $paymentMethod = $request->validated('payment_method');
+        $cart = $cartService->loadedForCustomer($request->user());
 
-        return DB::transaction(function () use ($validated, $request) {
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('customer.cart.index')
+                ->with('error', 'Your cart is empty.');
+        }
+
+        foreach ($cart->items as $item) {
+            if ($item->product->stock < $item->quantity) {
+                return back()->withErrors([
+                    'items' => "Not enough stock for {$item->product->name}. Available: {$item->product->stock}",
+                ]);
+            }
+        }
+
+        return DB::transaction(function () use ($cart, $cartService, $paymentMethod, $request) {
             $totalPrice = 0;
             $itemsData = [];
 
-            foreach ($validated['items'] as $item) {
-                $product = Product::findOrFail($item['product_id']);
-
-                if ($product->stock < $item['quantity']) {
-                    return back()->withErrors([
-                        'items' => "Not enough stock for {$product->name}. Available: {$product->stock}",
-                    ]);
-                }
-
-                $lineTotal = $product->price * $item['quantity'];
-                $totalPrice += $lineTotal;
+            foreach ($cart->items as $item) {
+                $product = $item->product;
+                $totalPrice += $product->price * $item->quantity;
 
                 $itemsData[] = [
                     'product_id' => $product->id,
-                    'quantity' => $item['quantity'],
+                    'quantity' => $item->quantity,
                     'price' => $product->price,
                 ];
 
-                $product->decrement('stock', $item['quantity']);
+                $product->decrement('stock', $item->quantity);
             }
 
             $order = Order::create([
@@ -133,9 +135,11 @@ class CustomerController extends Controller
 
             $order->payment()->create([
                 'amount' => $totalPrice,
-                'method' => $validated['payment_method'],
+                'method' => $paymentMethod,
                 'status' => PaymentStatus::COMPLETED,
             ]);
+
+            $cartService->clear($cart);
 
             return redirect()->route('customer.orders.show', $order->id)
                 ->with('success', 'Order placed successfully!');
