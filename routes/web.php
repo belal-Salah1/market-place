@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RoleStatus;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryReportController;
@@ -17,8 +18,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewsReportController;
 use App\Http\Controllers\VendorController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,11 +34,10 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::middleware('guest')->group(function(){
-    Route::get('/auth/google/redirect',[GoogleAuthController::class,'redirect'])->name('auth.google.redirect');
-    Route::get('/auth/google/callback',[GoogleAuthController::class,'callback'])->name('auth.google.callback');
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard - redirects via middleware based on role
@@ -71,6 +73,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Customer dashboard
     Route::get('/customer/dashboard', [CustomerController::class, 'index'])->middleware('role:customer')->name('customer.dashboard');
 });
+
+// Local-only shortcut for signing in as a customer without going through the login form.
+if (app()->environment('local', 'testing')) {
+    Route::get('dev/login-as-customer', function () {
+        $customer = User::where('email', 'customer@example.com')->first()
+            ?? User::whereRelation('role', 'name', RoleStatus::CUSTOMER->value)->firstOrFail();
+
+        Auth::login($customer);
+
+        return redirect()->route('customer.dashboard');
+    })->name('dev.login-as-customer');
+}
 
 // Customer routes
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
