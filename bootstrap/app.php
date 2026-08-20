@@ -13,6 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Behind a tunnel (ngrok) or load balancer, honour X-Forwarded-*. Without this
+        // Laravel sees http + 127.0.0.1, which yields mixed-content asset URLs and
+        // sends a worthless client_ip_address to the Meta Conversions API.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'role' => \App\Http\Middleware\UserRole::class,
             'redirect.dashboard' => \App\Http\Middleware\RedirectWithUserType::class,
