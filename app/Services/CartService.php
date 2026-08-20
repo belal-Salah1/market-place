@@ -29,15 +29,16 @@ class CartService
      * Adding a product already in the cart tops up its quantity instead of
      * creating a second row.
      */
-    public function add(User $customer, Product $product, int $quantity): CartItem
+    public function add(User $customer, Product $product, int $quantity): CartAddition
     {
         $cart = $this->forCustomer($customer);
 
         $item = $cart->items()->firstOrNew(['product_id' => $product->id]);
-        $item->quantity = min($product->stock, ($item->quantity ?? 0) + $quantity);
+        $before = $item->quantity ?? 0;
+        $item->quantity = min($product->stock, $before + $quantity);
         $item->save();
 
-        return $item;
+        return new CartAddition($item, $item->quantity - $before);
     }
 
     public function updateQuantity(CartItem $item, int $quantity): CartItem

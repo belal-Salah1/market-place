@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => session('error'),
             ],
             'cartCount' => fn () => $this->cartCount($request),
+            'metaEvent' => fn () => session('meta_event'),
         ];
     }
 

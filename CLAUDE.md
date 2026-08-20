@@ -19,7 +19,9 @@ php artisan test --compact                        # Run all tests
 php artisan test --compact --filter=testName       # Run specific test
 php artisan test --compact tests/Unit/OrderReportTest.php  # Run specific file
 ```
-Tests use Pest 4 with PHPUnit 12. Test DB: MySQL database `market`. Unit tests are in `tests/Unit/`, feature tests in `tests/Feature/`.
+Tests use Pest 4 with PHPUnit 12. Test DB: in-memory SQLite (set in `phpunit.xml`) so `RefreshDatabase` can never wipe the development `market` database. Unit tests are in `tests/Unit/`, feature tests in `tests/Feature/`.
+
+Because SQLite and MySQL do not guarantee the same row order, assert unordered query results with `toEqualCanonicalizing`, not `toBe`.
 
 ### Linting & Formatting
 ```bash
