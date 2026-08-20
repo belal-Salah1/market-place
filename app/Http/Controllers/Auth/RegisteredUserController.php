@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Meta\MetaEventService;
 use App\Services\RoleAssignmentService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -29,8 +30,11 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request, RoleAssignmentService $roleAssignmentService): RedirectResponse
-    {
+    public function store(
+        Request $request,
+        RoleAssignmentService $roleAssignmentService,
+        MetaEventService $metaEvents,
+    ): RedirectResponse {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
@@ -51,6 +55,8 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        $metaEvents->completeRegistration($request, $user);
 
         return redirect(route('dashboard', absolute: false));
     }

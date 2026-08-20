@@ -102,6 +102,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::patch('/customer/cart/{cartItem}', [CartController::class, 'update'])->name('customer.cart.update');
     Route::delete('/customer/cart/{cartItem}', [CartController::class, 'destroy'])->name('customer.cart.destroy');
     Route::get('/customer/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
+    Route::post('/customer/checkout/payment-method', [CheckoutController::class, 'paymentMethod'])->name('customer.checkout.payment-method');
 });
 
 // Vendor pending approval (not protected by vendor.approval to avoid loop)

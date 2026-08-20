@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentMethodStatus;
+use App\Http\Requests\TrackPaymentMethodRequest;
 use App\Services\CartService;
+use App\Services\Meta\MetaEventService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CheckoutController extends Controller
 {
-    public function __construct(private readonly CartService $cart) {}
+    public function __construct(
+        private readonly CartService $cart,
+        private readonly MetaEventService $metaEvents,
+    ) {}
 
     public function index(Request $request)
     {
@@ -28,5 +33,18 @@ class CheckoutController extends Controller
                 PaymentMethodStatus::cases()
             ),
         ]);
+    }
+
+    /**
+     * The checkout page pings this when the customer picks a payment method, so
+     * the server mints the event_id and AddPaymentInfo goes out on both sides.
+     */
+    public function paymentMethod(TrackPaymentMethodRequest $request)
+    {
+        $cart = $this->cart->loadedForCustomer($request->user());
+
+        $this->metaEvents->addPaymentInfo($request, $cart, $request->paymentMethod());
+
+        return back();
     }
 }

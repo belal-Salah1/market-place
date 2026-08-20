@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
+use App\Events\PaymentCompleted;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Category;
 use App\Models\Order;
@@ -108,7 +109,7 @@ class CustomerController extends Controller
             }
         }
 
-        return DB::transaction(function () use ($cart, $cartService, $paymentMethod, $request) {
+        $order = DB::transaction(function () use ($cart, $cartService, $paymentMethod, $request) {
             $totalPrice = 0;
             $itemsData = [];
 
@@ -141,8 +142,15 @@ class CustomerController extends Controller
 
             $cartService->clear($cart);
 
-            return redirect()->route('customer.orders.show', $order->id)
-                ->with('success', 'Order placed successfully!');
+            return $order;
         });
+
+        // The payment settled with the order, so the purchase is confirmed the
+        // moment the transaction commits — a gateway webhook would dispatch this
+        // same event instead.
+        event(PaymentCompleted::fromRequest($order, $request));
+
+        return redirect()->route('customer.orders.show', $order->id)
+            ->with('success', 'Order placed successfully!');
     }
 }
