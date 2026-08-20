@@ -14,6 +14,10 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+
+        @if (auth()->user()?->role?->name === \App\Enums\RoleStatus::CUSTOMER->value)
+            @include('partials.meta-pixel')
+        @endif
     </head>
     <body class="font-sans antialiased">
         @inertia
