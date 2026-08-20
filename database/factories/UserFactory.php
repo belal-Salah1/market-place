@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\RoleStatus;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,8 +31,45 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role_id' => \App\Models\Role::where('name', \App\Enums\RoleStatus::CUSTOMER->value)->first()->id ?? \App\Models\Role::factory(),
+            'role_id' => fn () => $this->roleId(RoleStatus::CUSTOMER),
+            'is_approved' => false,
         ];
+    }
+
+    /**
+     * Assign the given role, creating it when the roles table has not been seeded.
+     */
+    public function role(RoleStatus $role): static
+    {
+        return $this->state(fn () => ['role_id' => $this->roleId($role)]);
+    }
+
+    public function admin(): static
+    {
+        return $this->role(RoleStatus::ADMIN)->approved();
+    }
+
+    /**
+     * Vendors are approved by default; chain unapproved() for the pending-approval flow.
+     */
+    public function vendor(): static
+    {
+        return $this->role(RoleStatus::VENDOR)->approved();
+    }
+
+    public function customer(): static
+    {
+        return $this->role(RoleStatus::CUSTOMER);
+    }
+
+    public function approved(): static
+    {
+        return $this->state(['is_approved' => true]);
+    }
+
+    public function unapproved(): static
+    {
+        return $this->state(['is_approved' => false]);
     }
 
     /**
@@ -41,5 +80,10 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    protected function roleId(RoleStatus $role): int
+    {
+        return Role::firstOrCreate(['name' => $role->value])->id;
     }
 }
