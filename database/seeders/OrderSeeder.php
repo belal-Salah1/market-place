@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleStatus;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -12,6 +14,10 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        Order::factory(15)->create();
+        $customers = User::whereHas('role', fn ($q) => $q->where('name', RoleStatus::CUSTOMER->value))->pluck('id');
+
+        Order::factory(15)
+            ->sequence(fn ($sequence) => $customers->isEmpty() ? [] : ['customer_id' => $customers->random()])
+            ->create();
     }
 }

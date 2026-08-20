@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleStatus;
+use App\Models\Product;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
@@ -12,6 +15,14 @@ class ReviewSeeder extends Seeder
      */
     public function run(): void
     {
-        Review::factory(15)->create();
+        $customers = User::whereHas('role', fn ($q) => $q->where('name', RoleStatus::CUSTOMER->value))->pluck('id');
+        $products = Product::pluck('id');
+
+        Review::factory(15)
+            ->sequence(fn ($sequence) => array_filter([
+                'customer_id' => $customers->isEmpty() ? null : $customers->random(),
+                'product_id' => $products->isEmpty() ? null : $products->random(),
+            ]))
+            ->create();
     }
 }

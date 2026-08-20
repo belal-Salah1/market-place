@@ -22,7 +22,7 @@ class ReviewFactory extends Factory
             'rating' => fake()->numberBetween(1, 5),
             'comment' => fake()->paragraph(),
             'product_id' => Product::factory(),
-            'customer_id' => User::factory(),
+            'customer_id' => User::factory()->customer(),
         ];
     }
 }

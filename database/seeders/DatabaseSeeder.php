@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,10 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $this->call([
             RoleSeeder::class,
+            UserSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
             OrderSeeder::class,
@@ -23,16 +21,5 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             ReviewSeeder::class,
         ]);
-
-        $adminRole = \App\Models\Role::where('name', \App\Enums\RoleStatus::ADMIN->value)->first();
-
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
-                'role_id' => $adminRole->id,
-            ]
-        );
     }
 }
