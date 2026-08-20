@@ -1,9 +1,20 @@
 import { router } from '@inertiajs/vue3';
 
 /**
- * The Pixel base snippet fires PageView on the initial document load only.
- * Inertia visits swap pages without a reload, so re-track them here.
+ * The Pixel base snippet fires PageView for the initial document, and Inertia
+ * fires `navigate` for that same first page — so skip that one and only
+ * re-track the client-side visits that follow.
  */
 export function trackInertiaPageViews() {
-    router.on('navigate', () => window.fbq?.('track', 'PageView'));
+    let isInitialVisit = true;
+
+    router.on('navigate', () => {
+        if (isInitialVisit) {
+            isInitialVisit = false;
+
+            return;
+        }
+
+        window.fbq?.('track', 'PageView');
+    });
 }
