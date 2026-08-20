@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\Meta\MetaEventService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ class GoogleAuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request, MetaEventService $metaEvents)
     {
         try {
             $user = Socialite::driver('google')->stateless()->user();
@@ -27,6 +29,8 @@ class GoogleAuthController extends Controller
         $googleUser = User::where('google_id', $user->getId())
             ->orWhere('email', $user->getEmail())
             ->first();
+
+        $isNewAccount = ! $googleUser;
 
         if ($googleUser) {
             $googleUser->update(['google_id' => $user->getId()]);
@@ -41,11 +45,15 @@ class GoogleAuthController extends Controller
             ]);
         }
 
-        if (!$googleUser->hasVerifiedEmail()) {
+        if (! $googleUser->hasVerifiedEmail()) {
             $googleUser->markEmailAsVerified();
         }
 
         Auth::login($googleUser);
+
+        if ($isNewAccount) {
+            $metaEvents->completeRegistration($request, $googleUser);
+        }
 
         return redirect()->route('dashboard');
     }

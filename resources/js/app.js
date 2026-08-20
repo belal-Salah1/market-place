@@ -13,6 +13,9 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
+        trackInertiaPageViews();
+        trackFlashedEvents(props.initialPage);
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
@@ -22,6 +25,3 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
-
-trackInertiaPageViews();
-trackFlashedEvents();

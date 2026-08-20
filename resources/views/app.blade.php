@@ -15,9 +15,14 @@
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
 
-        @if (auth()->user()?->role?->name === \App\Enums\RoleStatus::CUSTOMER->value)
+        {{-- Guests are the top of the funnel, so they get the Pixel too; only
+             admin and vendor back-office traffic stays out of the reporting. --}}
+        @unless (in_array(auth()->user()?->role?->name, [
+            \App\Enums\RoleStatus::ADMIN->value,
+            \App\Enums\RoleStatus::VENDOR->value,
+        ], true))
             @include('partials.meta-pixel')
-        @endif
+        @endunless
     </head>
     <body class="font-sans antialiased">
         @inertia

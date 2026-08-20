@@ -14,6 +14,12 @@ it('renders the pixel for a customer', function () {
         ->assertSee("fbq('track', 'PageView')", false);
 });
 
+it('renders the pixel for a guest at the top of the funnel', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee("fbq('init', \"1410832676690361\")", false);
+});
+
 it('does not render the pixel for admins or vendors', function () {
     $this->actingAs(User::factory()->admin()->create())
         ->get(route('admin.dashboard'))

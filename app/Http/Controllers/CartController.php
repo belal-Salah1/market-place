@@ -39,13 +39,9 @@ class CartController extends Controller
 
         $addition = $this->cart->add($request->user(), $product, $request->validated('quantity'));
 
-        $response = back()->with('success', "{$product->name} added to your cart.");
+        $this->metaEvents->addToCart($request, $addition->item, $addition->addedQuantity);
 
-        if ($metaEvent = $this->metaEvents->addToCart($request, $addition->item, $addition->addedQuantity)) {
-            $response->with('meta_event', $metaEvent);
-        }
-
-        return $response;
+        return back()->with('success', "{$product->name} added to your cart.");
     }
 
     public function update(UpdateCartItemRequest $request, CartItem $cartItem)

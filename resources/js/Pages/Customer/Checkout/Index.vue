@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 interface CartItem {
@@ -29,6 +29,12 @@ function formatPrice(price: number): string {
 
 function submit() {
     form.post(route('customer.orders.store'));
+}
+
+// Picking a payment method is a funnel step of its own. The server mints the
+// event_id so the Pixel and the Conversions API report the same AddPaymentInfo.
+function trackPaymentMethod() {
+    router.post(route('customer.checkout.payment-method'), { payment_method: form.payment_method }, { preserveState: true, preserveScroll: true });
 }
 </script>
 
@@ -112,6 +118,7 @@ function submit() {
                                     <select
                                         v-model="form.payment_method"
                                         class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 focus:outline-none dark:border-[#2e3039] dark:bg-[#1a1d23] dark:text-gray-200"
+                                        @change="trackPaymentMethod"
                                     >
                                         <option v-for="method in paymentMethods" :key="method.value" :value="method.value">
                                             {{ method.label }}
