@@ -12,6 +12,7 @@ use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MetaBrowserEventController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
 use App\Http\Controllers\ProductController;
@@ -40,6 +41,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
     Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
+
+// Telemetry sink for the browser Pixel. Public by necessity — guests are the top of
+// the funnel — so it is throttled and accepts only an allowlisted event name plus id.
+Route::post('/meta/browser-event', [MetaBrowserEventController::class, 'store'])
+    ->middleware('throttle:60,1')
+    ->name('meta.browser-event');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard - redirects via middleware based on role
