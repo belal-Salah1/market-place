@@ -49,4 +49,16 @@ class MetaEvent extends Model
             'last_error' => $error,
         ]);
     }
+
+    /**
+     * Put a failed event back in the queue. `attempts` deliberately keeps climbing
+     * rather than resetting — the cumulative number is the useful diagnostic.
+     */
+    public function markPending(): void
+    {
+        $this->update([
+            'status' => MetaEventStatus::PENDING,
+            'last_error' => null,
+        ]);
+    }
 }

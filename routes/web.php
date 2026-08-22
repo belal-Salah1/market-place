@@ -13,6 +13,7 @@ use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MetaBrowserEventController;
+use App\Http\Controllers\MetaTrackingController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
 use App\Http\Controllers\ProductController;
@@ -73,6 +74,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/vendors/{user}', [AdminController::class, 'vendorShow'])
         ->middleware('role:admin')
         ->name('admin.vendors.show');
+
+    // Meta tracking dashboard
+    Route::get('/admin/tracking', [MetaTrackingController::class, 'index'])
+        ->middleware('role:admin')
+        ->name('admin.tracking.index');
+
+    Route::post('/admin/tracking/events/{event}/retry', [MetaTrackingController::class, 'retry'])
+        ->middleware('role:admin')
+        ->name('admin.tracking.retry');
 
     // Vendor dashboard & orders
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->middleware('role:vendor')->name('vendor.dashboard');
