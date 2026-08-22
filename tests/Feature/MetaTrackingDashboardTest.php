@@ -35,10 +35,6 @@ it('is closed to a vendor', function () {
 });
 
 it('shows an admin the funnel, CAPI health and dedup figures', function () {
-    // The Vue page is a later task; don't fail this assertion over the component
-    // file not existing on disk yet.
-    config()->set('inertia.testing.ensure_pages_exist', false);
-
     MetaBrowserEvent::create(['event_name' => 'PageView']);
     MetaBrowserEvent::create(['event_name' => 'Purchase', 'event_id' => 'order_1']);
     trackedEvent('Purchase', 'order_1', MetaEventStatus::SENT);
