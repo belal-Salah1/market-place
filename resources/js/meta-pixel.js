@@ -1,12 +1,59 @@
 import { router } from '@inertiajs/vue3';
 
 /**
+ * The base snippet's stub `fbq` queues calls, so `window.fbq` is defined even when
+ * `fbevents.js` was blocked. Only the real library sets `callMethod`, so this is the
+ * honest test of whether a fire actually reached Meta — a blocked fire records no
+ * browser row, which is exactly the gap the tracking dashboard should show.
+ */
+function pixelLoaded() {
+    return typeof window.fbq?.callMethod === 'function';
+}
+
+/**
+ * `fbevents.js` is injected async, so the first fire can beat it. Wait for the real
+ * library for about four seconds, then give up — at that point it is blocked or
+ * failed, and recording nothing is the correct answer.
+ */
+function whenPixelLoaded(callback, attempt = 0) {
+    if (pixelLoaded()) {
+        callback();
+
+        return;
+    }
+
+    if (attempt >= 20) {
+        return;
+    }
+
+    setTimeout(() => whenPixelLoaded(callback, attempt + 1), 200);
+}
+
+/**
+ * Tell the server the Pixel fired, so the dashboard can compare browser counts to
+ * Conversions API counts. Deliberately `axios` rather than Inertia's router: a
+ * beacon must not perform a visit, which would re-render the page and re-trigger
+ * the `success` handler below. `resources/js/bootstrap.js` already configures axios
+ * to send the CSRF header from the XSRF cookie, so no token is read by hand.
+ * Failures are dropped — a missing telemetry row must never reach a customer.
+ */
+function beacon(eventName, eventId = null) {
+    whenPixelLoaded(() => {
+        window.axios?.post(route('meta.browser-event'), { event_name: eventName, event_id: eventId }).catch(() => {});
+    });
+}
+
+/**
  * The Pixel base snippet fires PageView for the initial document, and Inertia
  * fires `navigate` for that same first page — so skip that one and only
  * re-track the client-side visits that follow.
  */
 export function trackInertiaPageViews() {
     let isInitialVisit = true;
+
+    // The base snippet already fired PageView for the initial document; report it
+    // here because the snippet itself has no way to reach the server.
+    beacon('PageView');
 
     router.on('navigate', () => {
         if (isInitialVisit) {
@@ -16,6 +63,7 @@ export function trackInertiaPageViews() {
         }
 
         window.fbq?.('track', 'PageView');
+        beacon('PageView');
     });
 }
 
@@ -39,6 +87,7 @@ export function trackFlashedEvents(initialPage) {
         fired.add(meta.event_id);
 
         window.fbq?.('track', meta.name, meta.params, { eventID: meta.event_id });
+        beacon(meta.name, meta.event_id);
     };
 
     fire(initialPage?.props?.metaEvent);
