@@ -1553,7 +1553,15 @@ function retry(event: TrackedEvent) {
 </template>
 ```
 
-- [ ] **Step 2: Link it from the admin dashboard**
+- [ ] **Step 2: ~~Link it from the admin dashboard~~ — SUPERSEDED by Task 8b**
+
+Skipped. The dashboard gets live summary tiles instead of a plain navigation link,
+which needs a controller change too. See Task 8b. Task 8 must not touch
+`resources/js/Pages/Admin/Dashboard.vue` at all.
+
+<details>
+<summary>Original superseded step</summary>
+
 
 In `resources/js/Pages/Admin/Dashboard.vue`, directly after the closing `</div>` of the existing "View All Vendors Link" block, add a matching card:
 
@@ -1585,9 +1593,11 @@ In `resources/js/Pages/Admin/Dashboard.vue`, directly after the closing `</div>`
 
 `Link` is already imported in that file, so no import change is needed.
 
+</details>
+
 - [ ] **Step 3: Lint, format, and build**
 
-Run: `npx eslint resources/js/Pages/Admin/Tracking/Index.vue resources/js/Pages/Admin/Dashboard.vue --fix`
+Run: `npx eslint resources/js/Pages/Admin/Tracking/Index.vue --fix`
 Expected: no errors. ESLint enforces type-imports and import ordering — if it complains about the `@inertiajs/vue3` import, follow what it says.
 
 Run: `npx prettier --write resources/js/Pages/Admin/Tracking/Index.vue`
@@ -1601,6 +1611,195 @@ Expected: build succeeds with no TypeScript errors.
 git add resources/js/Pages/Admin/Tracking/Index.vue resources/js/Pages/Admin/Dashboard.vue
 git commit -m "feat: add the admin Meta tracking dashboard page"
 ```
+
+---
+
+### Task 8b: Real tracking tiles on the admin dashboard
+
+`resources/js/Pages/Admin/Dashboard.vue:63-79` currently renders four hardcoded
+placeholder stats — `'1,234'` Total Users, `'856'` Total Orders, `'$45.2K'` Revenue,
+`'48'` Active Vendors — with invented `+12%` deltas. This task puts real, live tracking
+numbers on the admin landing page and links through to the full report.
+
+**Files:**
+- Modify: `app/Services/Meta/MetaTrackingReportService.php` — add `summary()`
+- Modify: `app/Http/Controllers/AdminController.php` — pass the summary
+- Modify: `resources/js/Pages/Admin/Dashboard.vue` — render real tiles
+- Test: `tests/Feature/MetaTrackingReportTest.php` and `tests/Feature/MetaTrackingDashboardTest.php`
+
+- [ ] **Step 1: Write the failing service test**
+
+Append to `tests/Feature/MetaTrackingReportTest.php`:
+
+```php
+it('summarises the figures worth putting on the landing page', function () {
+    browserFire('Purchase', 'order_1');
+    serverEvent('Purchase', 'order_1', MetaEventStatus::SENT);
+    serverEvent('Purchase', 'order_2', MetaEventStatus::SENT);
+    serverEvent('AddToCart', 'atc_1', MetaEventStatus::SENT);
+
+    expect($this->reports->summary(null))->toBe([
+        'purchases' => 2,
+        'matched' => 1,
+        'deduplicated' => 3,
+        'failed' => 0,
+    ]);
+});
+
+it('counts a failed event outside the window, because it is still unreported', function () {
+    Carbon::setTestNow('2026-08-22 12:00:00');
+
+    serverEvent('Purchase', 'order_old', MetaEventStatus::FAILED, Carbon::parse('2026-07-01 12:00:00'));
+
+    $summary = $this->reports->summary(Carbon::now()->subDays(7));
+
+    expect($summary['failed'])->toBe(1)
+        ->and($summary['purchases'])->toBe(0);
+});
+```
+
+The second test is the point of the method: a `failed` count that ages out of the
+window would let a permanently unreported conversion vanish from the dashboard.
+
+- [ ] **Step 2: Run it to confirm it fails**
+
+Run: `php artisan test --no-coverage tests/Feature/MetaTrackingReportTest.php`
+Expected: FAIL — `Call to undefined method ...::summary()`.
+
+- [ ] **Step 3: Add `summary()` to the service**
+
+Add to `app/Services/Meta/MetaTrackingReportService.php`, after `deduplication()`:
+
+```php
+    /**
+     * The handful of figures worth putting on the admin landing page.
+     *
+     * `failed` is deliberately NOT windowed. An event that failed three weeks ago is
+     * still a conversion Meta never received, so letting it age out of the range
+     * would quietly hide unreported revenue.
+     *
+     * @return array{purchases: int, matched: int, deduplicated: int, failed: int}
+     */
+    public function summary(?Carbon $from): array
+    {
+        $dedup = $this->deduplication($from);
+
+        return [
+            'purchases' => MetaEvent::query()
+                ->when($from, fn (Builder $query) => $query->where('created_at', '>=', $from))
+                ->where('event_name', MetaStandardEvent::PURCHASE->value)
+                ->where('status', MetaEventStatus::SENT)
+                ->count(),
+            'matched' => $dedup['matched'],
+            'deduplicated' => $dedup['deduplicated'],
+            'failed' => MetaEvent::where('status', MetaEventStatus::FAILED)->count(),
+        ];
+    }
+```
+
+- [ ] **Step 4: Run it to confirm it passes**
+
+Run: `php artisan test --no-coverage tests/Feature/MetaTrackingReportTest.php`
+Expected: PASS, 12 tests.
+
+- [ ] **Step 5: Write the failing controller test**
+
+Append to `tests/Feature/MetaTrackingDashboardTest.php`:
+
+```php
+it('puts real tracking figures on the admin dashboard', function () {
+    MetaBrowserEvent::create(['event_name' => 'Purchase', 'event_id' => 'order_1']);
+    trackedEvent('Purchase', 'order_1', MetaEventStatus::SENT);
+    trackedEvent('AddToCart', 'atc_1', MetaEventStatus::FAILED);
+
+    $this->withoutVite()
+        ->actingAs(User::factory()->admin()->create())
+        ->get(route('admin.dashboard'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('tracking.purchases', 1)
+            ->where('tracking.matched', 1)
+            ->where('tracking.failed', 1)
+        );
+});
+```
+
+- [ ] **Step 6: Run it to confirm it fails**
+
+Run: `php artisan test --no-coverage tests/Feature/MetaTrackingDashboardTest.php`
+Expected: FAIL — the `tracking` prop does not exist.
+
+- [ ] **Step 7: Pass the summary from AdminController**
+
+In `app/Http/Controllers/AdminController.php`, add the imports:
+
+```php
+use App\Enums\MetaTrackingRange;
+use App\Services\Meta\MetaTrackingReportService;
+```
+
+Add a constructor:
+
+```php
+    public function __construct(private readonly MetaTrackingReportService $tracking) {}
+```
+
+Then in `index()`, add the prop to the existing `Inertia::render('Admin/Dashboard', [...])` array:
+
+```php
+            'tracking' => $this->tracking->summary(MetaTrackingRange::WEEK->since()),
+```
+
+- [ ] **Step 8: Run it to confirm it passes**
+
+Run: `php artisan test --no-coverage tests/Feature/MetaTrackingDashboardTest.php`
+Expected: PASS, 8 tests.
+
+- [ ] **Step 9: Render the tiles**
+
+In `resources/js/Pages/Admin/Dashboard.vue`, add `tracking` to the props:
+
+```js
+    tracking: {
+        type: Object,
+        required: true,
+    },
+```
+
+Delete the hardcoded `const stats = [...]` array entirely (it is four invented numbers
+with invented percentage deltas) and replace it with:
+
+```js
+// Real figures, unlike the placeholders that used to sit here. `failed` is all-time
+// on purpose — a conversion Meta never received does not stop mattering after a week.
+const trackingStats = computed(() => [
+    { name: 'Purchases tracked', value: props.tracking.purchases, hint: 'last 7 days' },
+    { name: 'Deduplicated', value: props.tracking.deduplicated, hint: 'last 7 days' },
+    { name: 'Browser/server matched', value: props.tracking.matched, hint: 'last 7 days' },
+    { name: 'CAPI failed', value: props.tracking.failed, hint: 'all time', alert: true },
+]);
+```
+
+Replace the `v-for="(stat, index) in stats"` stats-grid block with a grid over
+`trackingStats`, wrapped in a `Link` to `route('admin.tracking.index')` so the whole
+row drills through to the full report. Keep the existing glass-card styling
+(`rounded-2xl border-white/60 bg-white/80 backdrop-blur-sm`, with the
+`dark:border-[#2e3039] dark:bg-[#1e2028]/90` dark variants). A tile with
+`alert: true` and a non-zero value should read in `text-rose-600`; zero stays neutral,
+because "0 failed" is good news and must not look like an alarm.
+
+- [ ] **Step 10: Verify and commit**
+
+```bash
+npx eslint resources/js/Pages/Admin/Dashboard.vue --fix
+npx prettier --write resources/js/Pages/Admin/Dashboard.vue
+npm run build
+vendor/bin/pint --dirty --format agent
+php artisan test --no-coverage
+```
+
+All must pass. Then commit everything with the `Co-Authored-By: Belal Salah
+<belal.salah259@gmail.com>` trailer.
 
 ---
 
