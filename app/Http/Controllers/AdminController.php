@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MetaTrackingRange;
 use App\Models\User;
+use App\Services\Meta\MetaTrackingReportService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminController extends Controller
 {
+    public function __construct(private readonly MetaTrackingReportService $tracking) {}
+
     public function index(Request $request)
     {
         $pendingVendors = User::whereHas('role', fn ($q) => $q->where('name', 'vendor'))
@@ -17,6 +21,7 @@ class AdminController extends Controller
         return Inertia::render('Admin/Dashboard', [
             'user' => $request->user(),
             'pendingVendors' => $pendingVendors,
+            'tracking' => $this->tracking->summary(MetaTrackingRange::WEEK->since()),
         ]);
     }
 

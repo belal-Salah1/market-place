@@ -118,3 +118,19 @@ it('does not let a customer requeue an event', function () {
 
     Queue::assertNothingPushed();
 });
+
+it('puts real tracking figures on the admin dashboard', function () {
+    MetaBrowserEvent::create(['event_name' => 'Purchase', 'event_id' => 'order_1']);
+    trackedEvent('Purchase', 'order_1', MetaEventStatus::SENT);
+    trackedEvent('AddToCart', 'atc_1', MetaEventStatus::FAILED);
+
+    $this->withoutVite()
+        ->actingAs(User::factory()->admin()->create())
+        ->get(route('admin.dashboard'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('tracking.purchases', 1)
+            ->where('tracking.matched', 1)
+            ->where('tracking.failed', 1)
+        );
+});

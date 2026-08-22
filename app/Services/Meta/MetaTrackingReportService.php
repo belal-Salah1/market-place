@@ -97,6 +97,31 @@ class MetaTrackingReportService
     }
 
     /**
+     * The handful of figures worth putting on the admin landing page.
+     *
+     * `failed` is deliberately NOT windowed. An event that failed three weeks ago is
+     * still a conversion Meta never received, so letting it age out of the range
+     * would quietly hide unreported revenue.
+     *
+     * @return array{purchases: int, matched: int, deduplicated: int, failed: int}
+     */
+    public function summary(?Carbon $from): array
+    {
+        $dedup = $this->deduplication($from);
+
+        return [
+            'purchases' => MetaEvent::query()
+                ->when($from, fn (Builder $query) => $query->where('created_at', '>=', $from))
+                ->where('event_name', MetaStandardEvent::PURCHASE->value)
+                ->where('status', MetaEventStatus::SENT)
+                ->count(),
+            'matched' => $dedup['matched'],
+            'deduplicated' => $dedup['deduplicated'],
+            'failed' => MetaEvent::where('status', MetaEventStatus::FAILED)->count(),
+        ];
+    }
+
+    /**
      * The debugging view: what we sent, whether it landed, and why it did not.
      */
     public function recentEvents(?Carbon $from, int $perPage = 15): LengthAwarePaginator

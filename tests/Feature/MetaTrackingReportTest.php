@@ -147,3 +147,28 @@ it('paginates recent events newest first', function () {
     expect($page->total())->toBe(2)
         ->and($page->items()[0]->event_id)->toBe('order_1');
 });
+
+it('summarises the figures worth putting on the landing page', function () {
+    browserFire('Purchase', 'order_1');
+    serverEvent('Purchase', 'order_1', MetaEventStatus::SENT);
+    serverEvent('Purchase', 'order_2', MetaEventStatus::SENT);
+    serverEvent('AddToCart', 'atc_1', MetaEventStatus::SENT);
+
+    expect($this->reports->summary(null))->toBe([
+        'purchases' => 2,
+        'matched' => 1,
+        'deduplicated' => 3,
+        'failed' => 0,
+    ]);
+});
+
+it('counts a failed event outside the window, because it is still unreported', function () {
+    Carbon::setTestNow('2026-08-22 12:00:00');
+
+    serverEvent('Purchase', 'order_old', MetaEventStatus::FAILED, Carbon::parse('2026-07-01 12:00:00'));
+
+    $summary = $this->reports->summary(Carbon::now()->subDays(7));
+
+    expect($summary['failed'])->toBe(1)
+        ->and($summary['purchases'])->toBe(0);
+});
