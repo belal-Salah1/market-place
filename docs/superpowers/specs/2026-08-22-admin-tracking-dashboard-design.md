@@ -106,7 +106,9 @@ All queries Eloquent, all scoped to a resolved `?Carbon $from` (null = all time)
   `event_name`, `event_id`, `status`, `attempts`, `last_error`, `sent_at`, `payload`.
 
 Browser `PageView` has a null `event_id` and so contributes to the funnel column but
-not to any dedup figure. The UI renders its server/dedup cells blank, not `0`.
+is excluded from every dedup figure, with a note on the panel saying so. Its funnel
+`server` cell still reads `0` rather than blank — "we send no server PageView" and "the
+queue is broken" must not look different, so the zero stays honest.
 
 ### 5. `MetaTrackingController`
 
