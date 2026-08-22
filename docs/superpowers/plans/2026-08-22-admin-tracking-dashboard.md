@@ -612,10 +612,10 @@ use Illuminate\Support\Carbon;
 it('resolves each range to a start time', function () {
     Carbon::setTestNow('2026-08-22 14:00:00');
 
-    expect(MetaTrackingRange::TODAY->from()->toDateTimeString())->toBe('2026-08-22 00:00:00')
-        ->and(MetaTrackingRange::WEEK->from()->toDateTimeString())->toBe('2026-08-15 14:00:00')
-        ->and(MetaTrackingRange::MONTH->from()->toDateTimeString())->toBe('2026-07-23 14:00:00')
-        ->and(MetaTrackingRange::ALL->from())->toBeNull();
+    expect(MetaTrackingRange::TODAY->since()->toDateTimeString())->toBe('2026-08-22 00:00:00')
+        ->and(MetaTrackingRange::WEEK->since()->toDateTimeString())->toBe('2026-08-15 14:00:00')
+        ->and(MetaTrackingRange::MONTH->since()->toDateTimeString())->toBe('2026-07-23 14:00:00')
+        ->and(MetaTrackingRange::ALL->since())->toBeNull();
 });
 
 it('lists its values for the dashboard tabs', function () {
@@ -642,6 +642,10 @@ use Illuminate\Support\Carbon;
 /**
  * The tracking dashboard's date filter. `ALL` resolves to null, which every report
  * query reads as "do not constrain".
+ *
+ * Named `since()` rather than `from()` because every backed enum already inherits a
+ * static `BackedEnum::from()`, and PHP forbids a static and an instance method
+ * sharing a name.
  */
 enum MetaTrackingRange: string
 {
@@ -650,7 +654,7 @@ enum MetaTrackingRange: string
     case MONTH = '30d';
     case ALL = 'all';
 
-    public function from(): ?Carbon
+    public function since(): ?Carbon
     {
         return match ($this) {
             self::TODAY => Carbon::today(),
@@ -1194,7 +1198,7 @@ class MetaTrackingController extends Controller
         $range = MetaTrackingRange::tryFrom((string) $request->query('range'))
             ?? MetaTrackingRange::WEEK;
 
-        $from = $range->from();
+        $from = $range->since();
 
         return Inertia::render('Admin/Tracking/Index', [
             'range' => $range->value,
