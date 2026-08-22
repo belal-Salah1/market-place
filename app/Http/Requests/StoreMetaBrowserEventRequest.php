@@ -15,6 +15,16 @@ use Illuminate\Validation\Rule;
 class StoreMetaBrowserEventRequest extends FormRequest
 {
     /**
+     * Open on purpose. Stated explicitly because `passesAuthorization()` tests for
+     * the method's existence — leaving it off would be indistinguishable from
+     * having forgotten it, which is the wrong signal on a public write endpoint.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return array<string, array<int, mixed>>
      */
     public function rules(): array
