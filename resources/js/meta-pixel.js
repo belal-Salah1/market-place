@@ -11,6 +11,17 @@ function pixelLoaded() {
 }
 
 /**
+ * Whether this page carries the Pixel at all. The base snippet is an inline script
+ * that defines the stub during parsing, before this deferred module runs, so an
+ * undefined `fbq` here means the snippet was never rendered — admin and vendor
+ * traffic is held out of reporting, and no pixel id is configured. Nothing will
+ * ever load, so there is no point waiting for it.
+ */
+function pixelPresent() {
+    return typeof window.fbq === 'function';
+}
+
+/**
  * `fbevents.js` is injected async, so the first fire can beat it. Wait for the real
  * library for about four seconds, then give up — at that point it is blocked or
  * failed, and recording nothing is the correct answer.
@@ -22,7 +33,8 @@ function whenPixelLoaded(callback, attempt = 0) {
         return;
     }
 
-    if (attempt >= 20) {
+    // Polling would burn four seconds on every admin and vendor page load.
+    if (!pixelPresent() || attempt >= 20) {
         return;
     }
 
