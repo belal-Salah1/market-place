@@ -257,7 +257,8 @@ function retry(event: TrackedEvent) {
                         v-if="props.events.links.length > 3"
                         class="flex flex-wrap gap-1 border-t border-gray-100/80 px-6 py-4 dark:border-[#2e3039]"
                     >
-                        <template v-for="link in props.events.links" :key="link.label">
+                        <!-- Keyed by index, not label: a long paginator emits several "..." labels. -->
+                        <template v-for="(link, index) in props.events.links" :key="index">
                             <span v-if="!link.url" class="px-3 py-1 text-sm text-gray-300" v-html="link.label" />
                             <Link
                                 v-else
