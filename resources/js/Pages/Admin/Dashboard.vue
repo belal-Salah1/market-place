@@ -15,6 +15,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    tracking: {
+        type: Object,
+        required: true,
+    },
 });
 const format = useDateFormat();
 const isModalOpen = ref(false);
@@ -53,27 +57,14 @@ onMounted(() => {
     console.log('Pending Vendors:', props.pendingVendors);
 });
 
-const stats = [
-    {
-        name: 'Total Users',
-        value: '1,234',
-        change: '+12%',
-        icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
-    },
-    { name: 'Total Orders', value: '856', change: '+8%', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' },
-    {
-        name: 'Revenue',
-        value: '$45.2K',
-        change: '+23%',
-        icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    },
-    {
-        name: 'Active Vendors',
-        value: '48',
-        change: '+5%',
-        icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
-    },
-];
+// Real figures, unlike the placeholders that used to sit here. `failed` is all-time
+// on purpose — a conversion Meta never received does not stop mattering after a week.
+const trackingStats = computed(() => [
+    { name: 'Purchases tracked', value: props.tracking.purchases, hint: 'last 7 days' },
+    { name: 'Deduplicated', value: props.tracking.deduplicated, hint: 'last 7 days' },
+    { name: 'Browser/server matched', value: props.tracking.matched, hint: 'last 7 days' },
+    { name: 'CAPI failed', value: props.tracking.failed, hint: 'all time', alert: true },
+]);
 </script>
 
 <template>
@@ -88,36 +79,23 @@ const stats = [
 
         <div class="py-8">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <!-- Stats Grid -->
-                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Tracking Stats Grid -->
+                <Link :href="route('admin.tracking.index')" class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" data-gsap="fade-up">
                     <div
-                        v-for="(stat, index) in stats"
+                        v-for="stat in trackingStats"
                         :key="stat.name"
                         class="glass-card rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-[#2e3039] dark:bg-[#1e2028]/90"
-                        data-gsap="fade-up"
                     >
-                        <div class="mb-3 flex items-center justify-between">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 text-indigo-600"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                >
-                                    <path stroke-linecap="round" stroke-linejoin="round" :d="stat.icon" />
-                                </svg>
-                            </div>
-                            <span
-                                class="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                                >{{ stat.change }}</span
-                            >
-                        </div>
                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ stat.name }}</p>
-                        <p class="mt-0.5 text-xl font-bold text-gray-900 dark:text-gray-100">{{ stat.value }}</p>
+                        <p
+                            class="mt-0.5 text-xl font-bold"
+                            :class="stat.alert && stat.value > 0 ? 'text-rose-600' : 'text-gray-900 dark:text-gray-100'"
+                        >
+                            {{ stat.value }}
+                        </p>
+                        <p class="mt-1 text-[11px] font-medium text-gray-400 dark:text-gray-500">{{ stat.hint }}</p>
                     </div>
-                </div>
+                </Link>
 
                 <!-- View All Vendors Link -->
                 <div class="mb-8" data-gsap="fade-up" data-gsap-delay="0.3">

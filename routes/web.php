@@ -12,6 +12,8 @@ use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MetaBrowserEventController;
+use App\Http\Controllers\MetaTrackingController;
 use App\Http\Controllers\OrdersReportController;
 use App\Http\Controllers\PaymentsReportController;
 use App\Http\Controllers\ProductController;
@@ -41,6 +43,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
 
+// Telemetry sink for the browser Pixel. Public by necessity — guests are the top of
+// the funnel — so it is throttled and accepts only an allowlisted event name plus id.
+Route::post('/meta/browser-event', [MetaBrowserEventController::class, 'store'])
+    ->middleware('throttle:60,1')
+    ->name('meta.browser-event');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard - redirects via middleware based on role
     Route::get('/dashboard', function () {})->middleware(['vendor.approval', 'redirect.dashboard'])->name('dashboard');
@@ -66,6 +74,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/vendors/{user}', [AdminController::class, 'vendorShow'])
         ->middleware('role:admin')
         ->name('admin.vendors.show');
+
+    // Meta tracking dashboard
+    Route::get('/admin/tracking', [MetaTrackingController::class, 'index'])
+        ->middleware('role:admin')
+        ->name('admin.tracking.index');
+
+    Route::post('/admin/tracking/events/{event}/retry', [MetaTrackingController::class, 'retry'])
+        ->middleware('role:admin')
+        ->name('admin.tracking.retry');
 
     // Vendor dashboard & orders
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->middleware('role:vendor')->name('vendor.dashboard');
